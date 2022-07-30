@@ -215,7 +215,7 @@ atexit.register(exit)
 
 while True:
     while True:
-        if start_reader() == True: # 최초 
+        if start_reader() == True: # 최초 초록불 확인
             date=time.strftime("%Y-%m-%d")
             now=time.strftime("%H:%M:%S")
             firebase('on', '가공 시작')
@@ -224,7 +224,7 @@ while True:
 
 
     while True:
-        if grey_reader() == True: # 최초 회색불 
+        if grey_reader() == True: # 최초 회색불 감지
             date=time.strftime("%Y-%m-%d")
             now=time.strftime("%H:%M:%S")
             five_min_stop() # 5분 동안 20초 간격으로 회색불 확인

@@ -28,7 +28,7 @@ def grey_reader(): # 회색불
     if RGB == grey: 
         return True
 
-def uncut_reader(): # 줄 씹
+def uncut_reader(): # 줄 씹힘
     screen = ImageGrab.grab()
     pos_1 = (1120, 165)
     pos_2 = (1120, 200)
