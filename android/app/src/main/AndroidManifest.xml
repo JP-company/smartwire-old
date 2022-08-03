@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sit.wire">
+    package="com.sit.wireapp">
    <application
         android:label="SIT와이어"
         android:name="${applicationName}"

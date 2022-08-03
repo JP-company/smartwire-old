@@ -3,11 +3,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-import 'package:last/firebase_options.dart';
-import 'package:last/home_page.dart';
+import 'package:sitwireapp/firebase_options.dart';
+import 'package:sitwireapp/home_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:last/services/local_notification_service.dart';
-import 'package:last/login_page.dart';
+import 'package:sitwireapp/services/local_notification_service.dart';
+import 'package:sitwireapp/login_page.dart';
 
 
 Future<String?> token = FirebaseMessaging.instance.getToken();
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
 
-      home: HomePage(),
+      home: LoginPage(),
 
     );
   }

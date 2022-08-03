@@ -1,12 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:last/alarm_setting.dart';
-import 'package:last/functions/main_card.dart';
-import 'package:last/pushnotification_model.dart';
-import 'package:last/services/local_notification_service.dart';
-import 'package:last/wire1_page.dart';
-import 'package:last/wire2_page.dart';
+import 'package:sitwireapp/alarm_setting.dart';
+import 'package:sitwireapp/functions/main_card.dart';
+import 'package:sitwireapp/pushnotification_model.dart';
+import 'package:sitwireapp/services/local_notification_service.dart';
+import 'package:sitwireapp/wire1_page.dart';
+import 'package:sitwireapp/wire2_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 

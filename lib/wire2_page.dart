@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:last/detail_pag2.dart';
+import 'package:sitwireapp/detail_pag2.dart';
 
 class Wire2Page extends StatelessWidget {
 
