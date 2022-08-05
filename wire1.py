@@ -152,31 +152,30 @@ def five_min_stop(): # 5분 정지 감지 타이머
                                                             time.sleep(20)
 
 def firststop(): #첫 멈춤
-    if start_reader() != True and afterwork() == True: # 최초 회색불 감지, 퇴근 후
-        date=time.strftime("%Y-%m-%d")
-        now=time.strftime("%H:%M:%S")
-        #five_min_stop() # 5분 동안 20초 간격으로 회색불 확인
-        if start_reader() != True and uncut_reader() == True: # 줄 씹힘
-            firebase('uncut', '와이어 선 씹힘', 'STOP')
-        elif start_reader() != True and nowire_reader() == True: # 와이어 선 부족
-            firebase('nowire', '와이어 선 부족', 'STOP')
-        elif start_reader() != True and finished_reader() == True: # 작업종료
-            firebase('finished', '작업 종료', 'STOP')
-        elif start_reader() != True and comoff_reader() ==True: # 컴퓨터 종료
-            firebase('comoff', '컴퓨터 종료', 'STOP')
-        elif start_reader() != True and contact_reader() == True: # 와이어 선 접촉
-            firebase('contact', '와이어 선 접촉', 'STOP')
-        elif start_reader() != True and pause_reader() == True: # 와이어 미동작
-            pag.click(680, 430)
-            time.sleep(1)
-            pag.click(550, 720)
-            firebase('pause', '와이어 미동작', 'STOP')
-        elif start_reader() != True and moff_reader() == True: # M코드 정지
-            firebase('moff', 'M코드 정지', 'STOP')
-        elif start_reader() != True and uncut_reader() != True and nowire_reader() != True and finished_reader() != True and comoff_reader() != True and contact_reader() != True and pause_reader() != True and moff_reader() != True: # 와이어 줄 연결 실패
-            firebase('off', '가공 정지', 'STOP')
-        else:
-            firebase('off', '가공 정지', 'STOP')
+    date=time.strftime("%Y-%m-%d")
+    now=time.strftime("%H:%M:%S")
+    #five_min_stop() # 5분 동안 20초 간격으로 회색불 확인
+    if start_reader() != True and uncut_reader() == True: # 줄 씹힘
+        firebase('uncut', '와이어 선 씹힘', 'STOP')
+    elif start_reader() != True and nowire_reader() == True: # 와이어 선 부족
+        firebase('nowire', '와이어 선 부족', 'STOP')
+    elif start_reader() != True and finished_reader() == True: # 작업종료
+        firebase('finished', '작업 종료', 'STOP')
+    elif start_reader() != True and comoff_reader() ==True: # 컴퓨터 종료
+        firebase('comoff', '컴퓨터 종료', 'STOP')
+    elif start_reader() != True and contact_reader() == True: # 와이어 선 접촉
+        firebase('contact', '와이어 선 접촉', 'STOP')
+    elif start_reader() != True and pause_reader() == True: # 와이어 미동작
+        pag.click(680, 430)
+        time.sleep(1)
+        pag.click(550, 720)
+        firebase('pause', '와이어 미동작', 'STOP')
+    elif start_reader() != True and moff_reader() == True: # M코드 정지
+        firebase('moff', 'M코드 정지', 'STOP')
+    elif start_reader() != True and uncut_reader() != True and nowire_reader() != True and finished_reader() != True and comoff_reader() != True and contact_reader() != True and pause_reader() != True and moff_reader() != True: # 와이어 줄 연결 실패
+        firebase('off', '가공 정지', 'STOP')
+    else:
+        firebase('off', '가공 정지', 'STOP')
 
 def auto_start(): # 자동 재시작
     pag.screenshot('wire.png', region=(607, 76, 73, 26))
@@ -203,7 +202,17 @@ def afterwork(): # 퇴근시간, 점심시간
     min = int(time.strftime('%M'))
     if hour > 19 or hour < 8:
         return True
-    elif {hour >= 12 and min >= 30} and {hour <= 13 and min <= 30}:
+
+def lunch_1():
+    hour = int(time.strftime('%H'))
+    min = int(time.strftime('%M'))
+    if hour == 12 and min >=30:
+        return True    
+
+def lunch_2():
+    hour = int(time.strftime('%H'))
+    min = int(time.strftime('%M'))
+    if hour == 13 and min <=30:
         return True
 
 def screenshot(status): # 스크린샷 저장
@@ -223,7 +232,7 @@ def firebase(data, coment, status): # 서버 연결
     wire_off_date.set({
         u'date': u'%s'%date,
     })
-    if afterwork() == True:
+    if afterwork() == True or lunch_1() == True or lunch_2() == True:
         wire_push = db.collection(u'%s'%model).document(u'dates').collection('time').document(u'%s %s'%(date, now))
         wire_push.set({
             u'push' : u'yes'
@@ -238,13 +247,13 @@ def firebase(data, coment, status): # 서버 연결
 if start_reader() == True: # 가동중일때
     while True:
         while True:
-            if start_reader() == True: # 최초 초록불 확인, 퇴근 후
+            if start_reader() == True: # 최초 초록불 확인
                 date=time.strftime("%Y-%m-%d")
                 now=time.strftime("%H:%M:%S")
                 firebase('on', '가공 시작', 'START')
                 break
         while True:
-            if start_reader() != True: # 최초 회색불 감지, 퇴근 후
+            if start_reader() != True: # 최초 회색불 감지
                 date=time.strftime("%Y-%m-%d")
                 now=time.strftime("%H:%M:%S")
                 five_min_stop() # 5분 동안 20초 간격으로 회색불 확인
@@ -274,20 +283,20 @@ if start_reader() == True: # 가동중일때
                     break
                 elif start_reader() != True and uncut_reader() != True and nowire_reader() != True and finished_reader() != True and comoff_reader() != True and contact_reader() != True and pause_reader() != True and moff_reader() != True: # 와이어 줄 연결 실패
                     firebase('off', '가공 정지', 'STOP')
-                    brea
+                    break
 else: # 멈춰있을때
     date=time.strftime("%Y-%m-%d")
     now=time.strftime("%H:%M:%S")
     firststop()
     while True:
         while True:
-            if start_reader() == True: # 최초 초록불 확인, 퇴근 후
+            if start_reader() == True: # 최초 초록불 확인
                 date=time.strftime("%Y-%m-%d")
                 now=time.strftime("%H:%M:%S")
                 firebase('on', '가공 시작', 'START')
                 break
         while True:
-            if start_reader() != True: # 최초 회색불 감지, 퇴근 후
+            if start_reader() != True: # 최초 회색불 감지
                 date=time.strftime("%Y-%m-%d")
                 now=time.strftime("%H:%M:%S")
                 five_min_stop() # 5분 동안 20초 간격으로 회색불 확인
