@@ -32,15 +32,15 @@ class Wire1Page extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(),
-            );
-          }
+            );}
+
           final docs = snapshot.data!.docs;
           return ListView.builder(
               itemCount: docs.length,
               itemBuilder: (context, index) {
                 return ListTile(
                   onTap: () {
-                    Get.to(DetailPage1(index), arguments: docs[index]['date']);
+                    Get.to(DetailPage1(index), arguments: docs[index]['date']); // wire_1 문서(docs)에 'index'번쨰의 date 값
                   },
                   title: Text(
                       docs[index]['date'],

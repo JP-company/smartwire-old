@@ -5,13 +5,12 @@ import 'package:get/get.dart';
 class DetailPage1 extends StatelessWidget {
 
   final int id;
-
   const DetailPage1(this.id);
 
   @override
   Widget build(BuildContext context) {
 
-    String date = Get.arguments;
+    String date = Get.arguments; // docs[index]['date'] 값을 받아옴
 
     return Scaffold(
       appBar: AppBar(

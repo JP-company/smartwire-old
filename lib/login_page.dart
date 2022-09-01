@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController controller = TextEditingController(); //입력되는 값을 제어
   String code = '';
 
-  Widget _CodeInputWidget(){
+  Widget _CodeInputWidget() {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
       child: TextField(
@@ -41,35 +41,39 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 
-  Widget _ButtonWidget(){
+
+  Widget _ButtonWidget() {
     return Container(
       padding: EdgeInsets.fromLTRB(60, 0, 60, 0),
       child: ElevatedButton(
-        child: Container(
-          height: 40,
-          width: double.infinity,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(1),
-              color: Colors.blue
-          ),
-          child: Text("실행하기",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20
+          child: Container(
+            height: 40,
+            width: double.infinity,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(1),
+                color: Colors.blue
             ),
-            textAlign: TextAlign.center,
+            child: Text("실행하기",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20
+              ),
+              textAlign: TextAlign.center,
+            ),
           ),
-        ),
-        onPressed: () {
-          if (controller.text == 'sit0871') {
-          Get.to(HomePage());}
-        }
+          onPressed: () {
+            if (controller.text == 'sit') {
+              Get.offNamed("/home", arguments: 'wire_');
+            } else if (controller.text == 'gm') {
+              Get.offNamed("/home", arguments: 'KM_wire_');
+            }
+            // 여기서 코드에 따라 다른 값을 넘겨주면 됨
+          }
 
-        ),
+      ),
     );
   }
-
 
 
   @override
@@ -86,22 +90,14 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future <void> saveDB() async{
 
+  Future <void> saveDB() async {
     DBHelper sd = DBHelper();
-
     var fido = Memo(
-      id: 3,
-      code: 'sit0871'
+        id: 3,
+        code: 'sit0871'
     );
-
     await sd.insertMemo(fido);
     print(await sd.memos());
-
   }
 }
-
-
-
-
-

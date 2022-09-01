@@ -8,6 +8,8 @@ import 'package:sitwireapp/home_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:sitwireapp/services/local_notification_service.dart';
 import 'package:sitwireapp/login_page.dart';
+import 'package:sitwireapp/wire1_page.dart';
+import 'package:sitwireapp/wire2_page.dart';
 
 
 Future<String?> token = FirebaseMessaging.instance.getToken();
@@ -23,7 +25,6 @@ void main() async{
   LocalNotificationService.initialize();
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
   runApp(MyApp());
-
 }
 
 class MyApp extends StatelessWidget {
@@ -37,8 +38,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-
-      home: LoginPage(),
+      initialRoute: "/",
+      routes: {
+        "/" : (context) => LoginPage(),
+        "/home" : (context) => HomePage()
+      },
+      getPages: [
+        GetPage(name: "/", page: () => LoginPage()),
+        GetPage(name: "/home", page: () => HomePage()),
+      ],
 
     );
   }

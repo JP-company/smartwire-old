@@ -6,9 +6,6 @@ import 'package:sitwireapp/wire1_page.dart';
 
 class Wire1_sts extends StatelessWidget {
 
-
-
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
