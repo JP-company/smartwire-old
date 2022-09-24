@@ -1,10 +1,8 @@
-import time
+import imp
 
-hour = int(time.strftime('%H'))
 
-if hour < 15 or hour > 45:
-  print(hour)
-else:
-  print(hour + 100)
+import socket
 
-print(hour)
+ip_address = socket.gethostbyname(socket.gethostname())
+
+print('id adress: ', ip_address)
