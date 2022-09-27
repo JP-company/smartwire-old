@@ -12,11 +12,18 @@ import 'package:sitwireapp/wire1_page.dart';
 import 'package:sitwireapp/wire2_page.dart';
 
 
+Future<String?> token = FirebaseMessaging.instance.getToken();
+
+Future<void> backgroundHandler(RemoteMessage message) async{
+  print(message.data.toString());
+  print(message.notification!.title);
+}
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
   LocalNotificationService.initialize();
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
   runApp(MyApp());
 }
 

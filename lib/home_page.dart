@@ -3,17 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sitwireapp/alarm_setting.dart';
 import 'package:sitwireapp/functions/main_card.dart';
+import 'package:sitwireapp/pushnotification_model.dart';
 import 'package:sitwireapp/services/local_notification_service.dart';
 import 'package:sitwireapp/wire1_page.dart';
 import 'package:sitwireapp/wire2_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'main.dart';
 
-Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async{
-  print("Handling a background message: ${message.messageId}");
+
+
+Future<void> saveTokenToDatabase(String token) async {
+
+  await FirebaseFirestore.instance
+      .collection('users')
+      .doc('4')
+      .update({
+    'tokens': FieldValue.arrayUnion([token]),
+  });
 }
-
 
 class HomePage extends StatefulWidget {
 
@@ -22,6 +29,80 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  late final FirebaseMessaging _messaging;
+  PushNotification? _notificationInfo;
+
+  void registerNotification() async{
+    await Firebase.initializeApp();
+
+    _messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await _messaging.requestPermission(
+      alert: true,
+      badge: true,
+      provisional: false,
+      sound: true,
+    );
+    if (settings.authorizationStatus == AuthorizationStatus.authorized){
+      print("User granted the permission");
+
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        PushNotification notification = PushNotification(
+          title: message.notification!.title,
+          body: message.notification!.body,
+        );
+        setState(() {
+          _notificationInfo = notification;
+        });
+      });
+    }
+  }
+
+  storeNotificationToken() async{
+    String? token = await FirebaseMessaging.instance.getToken();
+    FirebaseFirestore.instance.collection('users').doc('4').set(
+        {
+          'token': token
+        },SetOptions(merge: true));
+  }
+
+  checkForInitialMessage() async{
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null){
+      PushNotification notification = PushNotification(
+        title: initialMessage.notification!.title,
+        body: initialMessage.notification!.body,
+      );
+      setState(() {
+        _notificationInfo = notification;
+      });
+    }
+  }
+
+  @override
+  void initState()  {
+    // 앱 백그라운드
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      PushNotification notification = PushNotification(
+        title: message.notification!.title,
+        body: message.notification!.body,
+      );
+      setState(() {
+        _notificationInfo = notification;
+      });
+    });
+
+    // 일반
+    registerNotification();
+    // 앱 꺼져있을 때
+    checkForInitialMessage();
+    // 토큰 저장
+    storeNotificationToken();
+    super.initState();
+
+  }
+
 
   String company = Get.arguments; // 코드를 받아옴
 
