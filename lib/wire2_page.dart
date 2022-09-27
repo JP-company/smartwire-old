@@ -5,6 +5,7 @@ import 'package:sitwireapp/detail_pag2.dart';
 
 class Wire2Page extends StatelessWidget {
 
+  String company = Get.arguments;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class Wire2Page extends StatelessWidget {
       ),
       body:
       StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('wire_2').snapshots(),
+        stream: FirebaseFirestore.instance.collection('$company' +'2').snapshots(),
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

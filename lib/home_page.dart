@@ -106,13 +106,20 @@ class _HomePageState extends State<HomePage> {
 
   String company = Get.arguments; // 코드를 받아옴
 
+  title() {
+    if ('$company' == 'wire_') {
+      return 'SIT 와이어';
+    } else if ('$company' == 'KM_wire_'){
+      return '광명 와이어';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('SIT와이어', style: TextStyle(
+          title: Text(title(), style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold),), // #회사 이름#
           centerTitle: false,
@@ -160,7 +167,13 @@ class _HomePageState extends State<HomePage> {
                                 final now = docs[last_sts]['now'];
                                 if(onoff == 'on'){
                                   return ElevatedButton(
-                                      onPressed: (){Get.to(Wire1Page());},
+                                      onPressed: (){
+                                        if('$company' == 'wire_'){
+                                          Get.to(Wire1Page(), arguments: 'wire_');}
+                                        else if('$company' == 'KM_wire_'){
+                                          Get.to(Wire1Page(), arguments: 'KM_wire_');
+                                        }
+                                      },
                                       style: OutlinedButton.styleFrom(
                                           minimumSize: Size(
                                               300.0,
@@ -209,7 +222,13 @@ class _HomePageState extends State<HomePage> {
                                 }
                                 else{
                                   return ElevatedButton(
-                                      onPressed: (){Get.to(Wire1Page());},
+                                      onPressed: (){
+                                        if('$company' == 'wire_'){
+                                          Get.to(Wire1Page(), arguments: 'wire_');}
+                                        else if('$company' == 'KM_wire_'){
+                                          Get.to(Wire1Page(), arguments: 'KM_wire_');
+                                        }
+                                        },
                                       style: OutlinedButton.styleFrom(
                                           minimumSize: Size(
                                               300.0,
@@ -300,7 +319,13 @@ class _HomePageState extends State<HomePage> {
                               final now = docs[last_sts]['now'];
                               if(onoff == 'on'){
                                 return ElevatedButton(
-                                    onPressed: (){Get.to(Wire2Page());},
+                                    onPressed: (){
+                                      if('$company' == 'wire_'){
+                                        Get.to(Wire2Page(), arguments: 'wire_');}
+                                      else if('$company' == 'KM_wire_'){
+                                        Get.to(Wire2Page(), arguments: 'KM_wire_');
+                                      }
+                                    },
                                     style: OutlinedButton.styleFrom(
                                         minimumSize: Size(
                                             300.0,
@@ -348,7 +373,13 @@ class _HomePageState extends State<HomePage> {
                                 ); // 가동중 버튼
                               }else{
                                 return ElevatedButton(
-                                    onPressed: (){Get.to(Wire2Page());},
+                                    onPressed: (){
+                                      if('$company' == 'wire_'){
+                                        Get.to(Wire2Page(), arguments: 'wire_');}
+                                      else if('$company' == 'KM_wire_'){
+                                        Get.to(Wire2Page(), arguments: 'KM_wire_');
+                                      }
+                                    },
                                     style: OutlinedButton.styleFrom(
                                         minimumSize: Size(
                                             300.0,
