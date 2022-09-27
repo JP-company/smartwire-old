@@ -6,8 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Wire1Page extends StatelessWidget {
 
 
-  String company = Get.arguments;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +26,7 @@ class Wire1Page extends StatelessWidget {
       ),
       body:
       StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('$company' + '1').snapshots(),
+        stream: FirebaseFirestore.instance.collection('wire_1').snapshots(),
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

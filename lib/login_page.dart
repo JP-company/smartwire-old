@@ -1,10 +1,22 @@
+<<<<<<< HEAD
 
+=======
+import 'package:firebase_core/firebase_core.dart';
+>>>>>>> parent of 2c51c96 (220927)
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sqflite/sqflite.dart';
-import 'dart:io';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:sitwireapp/alarm_setting.dart';
+import 'package:sitwireapp/database/db.dart';
+import 'package:sitwireapp/database/memo.dart';
+import 'package:sitwireapp/detail_pag.dart';
+import 'package:sitwireapp/functions/main_card.dart';
+import 'package:sitwireapp/home_page.dart';
+import 'package:sitwireapp/pushnotification_model.dart';
+import 'package:sitwireapp/services/local_notification_service.dart';
+import 'package:sitwireapp/wire1_page.dart';
+import 'package:sitwireapp/wire2_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -30,7 +42,9 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  } // 텍스트필드
+  }
+
+
 
   Widget _ButtonWidget() {
     return Container(
@@ -52,35 +66,24 @@ class _LoginPageState extends State<LoginPage> {
               textAlign: TextAlign.center,
             ),
           ),
-          onPressed: () async {
+          onPressed: () {
             if (controller.text == 'sit') {
-              Get.toNamed("/home", arguments: 'wire_');
-              await DatabaseHelper.instance.add(
-                Code(name: controller.text),
-              );
-              setState(() {
-                controller.clear();
-              });
+              Get.offNamed("/home", arguments: 'wire_');
             } else if (controller.text == 'gm') {
-              Get.toNamed("/home", arguments: 'KM_wire_');
-              await DatabaseHelper.instance.add(
-                Code(name: controller.text),
-              );
-              setState(() {
-                controller.clear();
-              });
+              Get.offNamed("/home", arguments: 'KM_wire_');
             }
             // 여기서 코드에 따라 다른 값을 넘겨주면 됨
           }
 
       ),
     );
-  } // 버튼
+  }
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+<<<<<<< HEAD
       body: Center(
         child: FutureBuilder<List<Code>>(
           future: DatabaseHelper.instance.getCodes(),
@@ -111,45 +114,30 @@ class _LoginPageState extends State<LoginPage> {
           },
         ),
       ),
-    );
-  }}
-
-class Code {
-  final int? id;
-  final String name;
-
-  Code({this.id, required this.name});
-
-  factory Code.fromMap(Map<String, dynamic> json) => new Code(
-    id: json['id'],
-    name: json['name'],
-  );
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-    };
-  }
-}
-
-
-class DatabaseHelper {
-  DatabaseHelper._privateConstructor();
-  static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
-
-  static Database? _database;
-  Future<Database> get database async => _database ??= await _initDatabase();
-
-  Future<Database> _initDatabase() async {
-    Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, 'codes.db');
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: _onCreate,
+=======
+        body: Form(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _CodeInputWidget(),
+              _ButtonWidget()
+            ],
+          ),)
+>>>>>>> parent of 2c51c96 (220927)
     );
   }
+
+
+  Future <void> saveDB() async {
+    DBHelper sd = DBHelper();
+    var fido = Memo(
+        id: 3,
+        code: 'sit0871'
+    );
+    await sd.insertMemo(fido);
+    print(await sd.memos());
+  }
+<<<<<<< HEAD
 
 
   Future _onCreate(Database db, int version) async {
@@ -181,4 +169,6 @@ class DatabaseHelper {
     return await db.delete('codes', where: 'id = ?', whereArgs:  [id]);
   }
 
+=======
+>>>>>>> parent of 2c51c96 (220927)
 }
