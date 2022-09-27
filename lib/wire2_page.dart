@@ -5,13 +5,14 @@ import 'package:sitwireapp/detail_pag2.dart';
 
 class Wire2Page extends StatelessWidget {
 
+  String company = Get.arguments;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('2번 와이어 가동 기록',style: TextStyle(
-          color: Colors.black
+            color: Colors.black
         ),),
         leading: IconButton(
           onPressed: (){
@@ -26,7 +27,7 @@ class Wire2Page extends StatelessWidget {
       ),
       body:
       StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('wire_2').snapshots(),
+        stream: FirebaseFirestore.instance.collection('$company' +'2').snapshots(),
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

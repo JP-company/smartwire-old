@@ -6,12 +6,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Wire1Page extends StatelessWidget {
 
 
+  String company = Get.arguments;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('1번 와이어 가동 기록',style: TextStyle(
-          color: Colors.black
+            color: Colors.black
         ),),
         leading: IconButton(
           onPressed: (){
@@ -26,7 +28,7 @@ class Wire1Page extends StatelessWidget {
       ),
       body:
       StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('wire_1').snapshots(),
+        stream: FirebaseFirestore.instance.collection('$company' + '1').snapshots(),
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -43,10 +45,10 @@ class Wire1Page extends StatelessWidget {
                     Get.to(DetailPage1(index), arguments: docs[index]['date']); // wire_1 문서(docs)에 'index'번쨰의 date 값
                   },
                   title: Text(
-                      docs[index]['date'],
-                      style: TextStyle(
-                      fontSize: 20.0
-                  ),
+                    docs[index]['date'],
+                    style: TextStyle(
+                        fontSize: 20.0
+                    ),
                   ),
                 );
               }
