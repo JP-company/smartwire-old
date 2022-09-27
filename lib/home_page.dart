@@ -58,6 +58,56 @@ class _HomePageState extends State<HomePage> {
       });
     }
   }
+<<<<<<< HEAD
+=======
+
+  storeNotificationToken() async{
+    String? token = await FirebaseMessaging.instance.getToken();
+    FirebaseFirestore.instance.collection('users').doc('4').set(
+        {
+          'token': token
+        },SetOptions(merge: true));
+  }
+
+  checkForInitialMessage() async{
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null){
+      PushNotification notification = PushNotification(
+        title: initialMessage.notification!.title,
+        body: initialMessage.notification!.body,
+      );
+      setState(() {
+        _notificationInfo = notification;
+      });
+    }
+  }
+
+  @override
+  void initState()  {
+    // 앱 백그라운드
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      PushNotification notification = PushNotification(
+        title: message.notification!.title,
+        body: message.notification!.body,
+      );
+      setState(() {
+        _notificationInfo = notification;
+      });
+    });
+
+    // 일반
+    registerNotification();
+    // 앱 꺼져있을 때
+    checkForInitialMessage();
+    // 토큰 저장
+    storeNotificationToken();
+    super.initState();
+
+  }
+
+
+  String company = Get.arguments; // 코드를 받아옴
+>>>>>>> parent of 8e1c47d (알림 하다가 조짐)
 
   storeNotificationToken() async{
     String? token = await FirebaseMessaging.instance.getToken();

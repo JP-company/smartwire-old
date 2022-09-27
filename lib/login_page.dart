@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-
-=======
 import 'package:firebase_core/firebase_core.dart';
->>>>>>> parent of 2c51c96 (220927)
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sitwireapp/alarm_setting.dart';
@@ -83,7 +79,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-<<<<<<< HEAD
       body: Center(
         child: FutureBuilder<List<Code>>(
           future: DatabaseHelper.instance.getCodes(),
@@ -114,7 +109,6 @@ class _LoginPageState extends State<LoginPage> {
           },
         ),
       ),
-=======
         body: Form(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -123,21 +117,11 @@ class _LoginPageState extends State<LoginPage> {
               _ButtonWidget()
             ],
           ),)
->>>>>>> parent of 2c51c96 (220927)
     );
   }
 
 
-  Future <void> saveDB() async {
-    DBHelper sd = DBHelper();
-    var fido = Memo(
-        id: 3,
-        code: 'sit0871'
-    );
-    await sd.insertMemo(fido);
-    print(await sd.memos());
-  }
-<<<<<<< HEAD
+
 
 
   Future _onCreate(Database db, int version) async {
@@ -169,6 +153,4 @@ class _LoginPageState extends State<LoginPage> {
     return await db.delete('codes', where: 'id = ?', whereArgs:  [id]);
   }
 
-=======
->>>>>>> parent of 2c51c96 (220927)
 }
