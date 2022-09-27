@@ -7,7 +7,6 @@ import 'package:sitwireapp/database/memo.dart';
 import 'package:sitwireapp/detail_pag.dart';
 import 'package:sitwireapp/functions/main_card.dart';
 import 'package:sitwireapp/home_page.dart';
-import 'package:sitwireapp/pushnotification_model.dart';
 import 'package:sitwireapp/services/local_notification_service.dart';
 import 'package:sitwireapp/wire1_page.dart';
 import 'package:sitwireapp/wire2_page.dart';
