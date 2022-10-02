@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sitwireapp/detail_pag2.dart';
 
 class Wire2Page extends StatelessWidget {
 
+  String company = Get.arguments; // 코드를 받아옴
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       appBar: AppBar(
         title: Text('2번 와이어 가동 기록',style: TextStyle(
@@ -26,7 +28,7 @@ class Wire2Page extends StatelessWidget {
       ),
       body:
       StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('wire_2').snapshots(),
+        stream: FirebaseFirestore.instance.collection('$company' + '2').snapshots(),
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -36,18 +38,23 @@ class Wire2Page extends StatelessWidget {
           }
           final docs = snapshot.data!.docs;
           return ListView.builder(
-              itemCount: docs.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  onTap: () {
-                    Get.to(DetailPage2(index), arguments: docs[index]['date']);
-                  },
-                  title: Text(docs[index]['date'],
-                    style: TextStyle(
-                        fontSize: 20.0
-                    ),),
-                );
-              }
+                itemCount: docs.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    onTap: () {
+                      if ('$company' == 'wire_'){
+                        Get.toNamed("/home/wire1page/detail_page2", arguments: docs[(docs.length - 1) - index]['date']); //wire_1 문서(docs)에 'index'번쨰의 date 값
+                      } else if('$company' == 'KM_wire_'){
+                        Get.toNamed("/home/wire1page/detail_page2_km", arguments: docs[(docs.length - 1) - index]['date']); //wire_1 문서(docs)에 'index'번쨰의 date 값
+                      }
+                    },
+                    title: Text(docs[(docs.length - 1) - index]['date'],
+                      style: TextStyle(
+                          fontSize: 20.0
+                      ),
+                    ),
+                  );
+                }
           );
         },
       ),

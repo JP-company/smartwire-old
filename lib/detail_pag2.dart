@@ -4,10 +4,6 @@ import 'package:get/get.dart';
 
 class DetailPage2 extends StatelessWidget {
 
-  final int id;
-
-  const DetailPage2(this.id);
-
   @override
   Widget build(BuildContext context) {
 
@@ -44,42 +40,67 @@ class DetailPage2 extends StatelessWidget {
               itemCount: docs.length,
               itemBuilder: (context, index){
                 final onoff = docs[index]['onoff'];
-                if(onoff == 'on'){
-                  return ListTile(
-                    title: Text(docs[index]['now'],
-                      style: TextStyle(
-                        fontSize:  18.0,
-                      ),),
-                    leading:
-                    Text('ON',
-                        style:TextStyle(
-                            fontSize: 18.0,
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold
-                        )),
-                  );
-                } else{
-                  return ListTile(
-                    title: Text(docs[index]['now'],
-                      style: TextStyle(
-                        fontSize:  18.0,
-                      ),),
-                    leading:
-                    Text('OFF',
-                        style:TextStyle(
-                            fontSize: 18.0,
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold
-                        )),
-                  );
 
+                dynamic onofftext;
+                dynamic onoffcolor;
+                dynamic onoffstatus;
+
+                if(onoff == 'on'){
+                  onofftext = 'ON';
+                  onoffcolor = Colors.green;
+                  onoffstatus = '';
+                } else if (onoff == 'off') {
+                  onofftext = 'OFF';
+                  onoffcolor = Colors.red;
+                  onoffstatus = '';
+                } else if (onoff == 'uncut') {
+                  onofftext = 'OFF';
+                  onoffcolor = Colors.red;
+                  onoffstatus = '   와이어 선 씹힘';
+                } else if (onoff == 'nowire') {
+                  onofftext = 'OFF';
+                  onoffcolor = Colors.red;
+                  onoffstatus = '   와이어 선 부족';
+                } else if (onoff == 'contact') {
+                  onofftext = 'OFF';
+                  onoffcolor = Colors.red;
+                  onoffstatus = '   와이어 선 접촉';
+                } else if (onoff == 'pause') {
+                  onofftext = 'OFF';
+                  onoffcolor = Colors.red;
+                  onoffstatus = '   와이어 미동작';
+                } else if (onoff == 'moff') {
+                  onofftext = 'OFF';
+                  onoffcolor = Colors.red;
+                  onoffstatus = '   M코드 정지';
+                } else if (onoff == 'finished') {
+                  onofftext = 'FIN';
+                  onoffcolor = Colors.blue;
+                  onoffstatus = '   작업 완료';
+                } else if (onoff == 'exit') {
+                  onofftext = 'ERR';
+                  onoffcolor = Color(0xffD7DF01);
+                  onoffstatus = '   알림 프로그램 애러';
                 }
+
+                return ListTile(
+                  title: Text(docs[index]['now'] + onoffstatus,
+                    style: TextStyle(
+                      fontSize:  18.0,
+                    ),),
+                  leading:
+                  Text(onofftext,
+                      style:TextStyle(
+                          fontSize: 18.0,
+                          color: onoffcolor,
+                          fontWeight: FontWeight.bold
+                      )),
+                );
 
               }
           );
         } ,
-      ),
-    );
+      ),);
 
   }
 }

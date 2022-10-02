@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sitwireapp/detail_pag.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Wire1Page extends StatelessWidget {
 
+
+  String company = Get.arguments; // 코드를 받아옴
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class Wire1Page extends StatelessWidget {
       ),
       body:
       StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('wire_1').snapshots(),
+        stream: FirebaseFirestore.instance.collection('$company' + '1').snapshots(),
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -40,10 +41,14 @@ class Wire1Page extends StatelessWidget {
               itemBuilder: (context, index) {
                 return ListTile(
                   onTap: () {
-                    Get.to(DetailPage1(index), arguments: docs[index]['date']); // wire_1 문서(docs)에 'index'번쨰의 date 값
+                    if ('$company' == 'wire_'){
+                      Get.toNamed("/home/wire1page/detail_page1", arguments: docs[(docs.length - 1) - index]['date']); //wire_1 문서(docs)에 'index'번쨰의 date 값
+                    } else if('$company' == 'KM_wire_'){
+                      Get.toNamed("/home/wire1page/detail_page1_km", arguments: docs[(docs.length - 1) - index]['date']); //wire_1 문서(docs)에 'index'번쨰의 date 값
+                    }
                   },
                   title: Text(
-                    docs[index]['date'],
+                    docs[(docs.length - 1) - index]['date'],
                     style: TextStyle(
                         fontSize: 20.0
                     ),
