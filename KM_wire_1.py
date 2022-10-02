@@ -218,7 +218,7 @@ def firebase(data, coment, status): # 서버 연결
     if afterwork() == True or lunch_1() == True or lunch_2() == True:
         wire_push = db.collection(u'%s'%model).document(u'dates').collection('time').document(u'%s %s'%(date, now))
         wire_push.set({
-            u'push' : u'yes'
+            u'push' : u'%s'%data
         })
         screenshot(status)
 
