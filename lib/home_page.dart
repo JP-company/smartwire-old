@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> {
     if ('$company' == 'wire_') {
       return 'SIT 와이어';
     } else if ('$company' == 'KM_wire_'){
-      return '광명 와이어';
+      return '광명와이어';
     }
   }
 
@@ -168,6 +168,8 @@ class _HomePageState extends State<HomePage> {
                               final onoff = docs[last_sts]['onoff'];
                               final now = docs[last_sts]['now'];
 
+                              dynamic wirename_1;
+                              dynamic wirename_2;
                               dynamic status;
 
                               dynamic shadowcolor;
@@ -177,6 +179,12 @@ class _HomePageState extends State<HomePage> {
                               dynamic status_text_color;
                               dynamic status_time;
                               dynamic status_size;
+
+                              if('$company' == 'wire_'){
+                                wirename_1 = '1번 와이어';
+                              } else if('$company' == 'KM_wire_'){
+                                wirename_1 = '2호기';
+                              }
 
                               if(onoff == 'on'){
                                 shadowcolor = Color(0xffD5FADC);
@@ -258,7 +266,7 @@ class _HomePageState extends State<HomePage> {
                                     child: Column(children: [
                                       Padding(
                                         padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                        child: Text('1번 와이어', style: TextStyle(
+                                        child: Text(wirename_1, style: TextStyle(
                                             fontSize: 15.0,
                                             color: Color(0xff4E4E4E)
                                         ),),
@@ -331,6 +339,7 @@ class _HomePageState extends State<HomePage> {
                             final onoff = docs[last_sts]['onoff'];
                             final now = docs[last_sts]['now'];
 
+                            dynamic wirename_2;
                             dynamic status;
                             dynamic shadowcolor;
                             dynamic bordersidecolor;
@@ -340,6 +349,12 @@ class _HomePageState extends State<HomePage> {
                             dynamic status_time;
                             dynamic status_size;
 
+
+                            if('$company' == 'wire_'){
+                              wirename_2 = '2번 와이어';
+                            } else if('$company' == 'KM_wire_'){
+                              wirename_2 = '3호기';
+                            }
 
                             if(onoff == 'on'){
                               shadowcolor = Color(0xffD5FADC);
@@ -421,7 +436,7 @@ class _HomePageState extends State<HomePage> {
                                   child: Column(children: [
                                     Padding(
                                       padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                      child: Text('2번 와이어', style: TextStyle(
+                                      child: Text(wirename_2, style: TextStyle(
                                           fontSize: 15.0,
                                           color: Color(0xff4E4E4E)
                                       ),),

@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           onPressed: () async {
             if (controller.text == 'sit') {
-              Get.toNamed("/home", arguments: 'wire_');
+              Get.offNamed("/home", arguments: 'wire_');
               await DatabaseHelper.instance.add(
                 Code(name: controller.text),
               );
@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                 controller.clear();
               });
             } else if (controller.text == 'gm') {
-              Get.toNamed("/home", arguments: 'KM_wire_');
+              Get.offNamed("/home", arguments: 'KM_wire_');
               await DatabaseHelper.instance.add(
                 Code(name: controller.text),
               );
@@ -95,10 +95,10 @@ class _LoginPageState extends State<LoginPage> {
                       children: snapshot.data!.map((code) {
                         if(code.name == 'sit'){
                           pageCode = 'sit';
-                          Get.toNamed("/home", arguments: 'wire_');
+                          Get.offNamed("/home", arguments: 'wire_');
                         } else if (code.name == 'gm'){
                           pageCode = 'km';
-                          Get.toNamed("/home", arguments: 'KM_wire_');
+                          Get.offNamed("/home", arguments: 'KM_wire_');
                         }
                         return Center(
                           child: Text(code.name),
@@ -131,6 +131,7 @@ class Code {
     return {
       'id': id,
       'name': name,
+
     };
   }
 }
