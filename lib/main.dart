@@ -1,16 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sitwireapp/detail_pag.dart';
-import 'package:sitwireapp/detail_pag1_km.dart';
-import 'package:sitwireapp/detail_pag2.dart';
-import 'package:sitwireapp/detail_pag2_km.dart';
+import 'package:sitwireapp/date_page.dart';
 import 'package:sitwireapp/firebase_options.dart';
 import 'package:sitwireapp/home_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:sitwireapp/login_page.dart';
-import 'package:sitwireapp/wire1_page.dart';
-import 'package:sitwireapp/wire2_page.dart';
+import 'package:sitwireapp/time_page.dart';
 
 
 Future<String?> token = FirebaseMessaging.instance.getToken();
@@ -45,16 +41,9 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(name: "/", page: () => LoginPage()),
         GetPage(name: "/home", page: () => HomePage()),
-        GetPage(name: "/home/wire1page", page: () => Wire1Page()),
-        GetPage(name: "/home/wire2page", page: () => Wire2Page()),
-        GetPage(name: "/home/wire1page/detail_page1", page: () => DetailPage1()),
-        GetPage(name: "/home/wire1page/detail_page2", page: () => DetailPage2()),
-        GetPage(name: "/home/wire1page/detail_page1_km", page: () => DetailPage1_KM()),
-        GetPage(name: "/home/wire1page/detail_page2_km", page: () => DetailPage2_KM()),
+        GetPage(name: "/home/date_page", page: () => DatePage()),
+        GetPage(name: "/home/date_page/time_page", page: () => TimePage()),
       ],
-
     );
   }
-
-
 }

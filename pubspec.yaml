@@ -75,8 +75,10 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/sit_logo.png
-    - assets/images/working.gif
-    - assets/images/working_stop.jpg
+    - assets/images/warning.png
+    - assets/images/running.gif
+    - assets/images/done.png
+    - assets/images/stop.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

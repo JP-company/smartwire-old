@@ -16,7 +16,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController controller = TextEditingController(); //입력되는 값을 제어
   String code = '';
-  String pageCode = '';
 
   Widget _CodeInputWidget() {
     return Container(
@@ -41,20 +40,18 @@ class _LoginPageState extends State<LoginPage> {
             width: double.infinity,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(1),
-                color: Colors.blue
-            ),
-            child: Text("실행하기",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20
-              ),
+                borderRadius: BorderRadius.circular(1), color: Colors.blue),
+            child: Text(
+              "실행하기",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               textAlign: TextAlign.center,
             ),
           ),
           onPressed: () async {
             if (controller.text == 'sit') {
-              Get.offNamed("/home", arguments: 'wire_');
+              Future.delayed(Duration.zero, () {
+                Get.toNamed("/home", arguments: 'wire_');
+              });
               await DatabaseHelper.instance.add(
                 Code(name: controller.text),
               );
@@ -62,7 +59,9 @@ class _LoginPageState extends State<LoginPage> {
                 controller.clear();
               });
             } else if (controller.text == 'gm') {
-              Get.offNamed("/home", arguments: 'KM_wire_');
+              Future.delayed(Duration.zero, () {
+                Get.toNamed("/home", arguments: 'KM_wire_');
+              });
               await DatabaseHelper.instance.add(
                 Code(name: controller.text),
               );
@@ -71,12 +70,9 @@ class _LoginPageState extends State<LoginPage> {
               });
             }
             // 여기서 코드에 따라 다른 값을 넘겨주면 됨
-          }
-
-      ),
+          }),
     );
   } // 버튼
-
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
       body: Center(
         child: FutureBuilder<List<Code>>(
           future: DatabaseHelper.instance.getCodes(),
-          builder: (BuildContext context, AsyncSnapshot<List<Code>>snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<List<Code>> snapshot) {
             return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -93,12 +89,14 @@ class _LoginPageState extends State<LoginPage> {
                     height: 1,
                     child: ListView(
                       children: snapshot.data!.map((code) {
-                        if(code.name == 'sit'){
-                          pageCode = 'sit';
-                          Get.offNamed("/home", arguments: 'wire_');
-                        } else if (code.name == 'gm'){
-                          pageCode = 'km';
-                          Get.offNamed("/home", arguments: 'KM_wire_');
+                        if (code.name == 'sit') {
+                          Future.delayed(Duration.zero, () {
+                            Get.toNamed("/home", arguments: 'wire_');
+                          });
+                        } else if (code.name == 'gm') {
+                          Future.delayed(Duration.zero, () {
+                            Get.toNamed("/home", arguments: 'KM_wire_');
+                          });
                         }
                         return Center(
                           child: Text(code.name),
@@ -108,13 +106,13 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   _CodeInputWidget(),
                   _ButtonWidget(),
-                ]
-            );
+                ]);
           },
         ),
       ),
     );
-  }}
+  }
+}
 
 class Code {
   final int? id;
@@ -123,25 +121,25 @@ class Code {
   Code({this.id, required this.name});
 
   factory Code.fromMap(Map<String, dynamic> json) => new Code(
-    id: json['id'],
-    name: json['name'],
-  );
+        id: json['id'],
+        name: json['name'],
+      );
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'name': name,
-
     };
   }
 }
 
-
 class DatabaseHelper {
   DatabaseHelper._privateConstructor();
+
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
 
   static Database? _database;
+
   Future<Database> get database async => _database ??= await _initDatabase();
 
   Future<Database> _initDatabase() async {
@@ -154,7 +152,6 @@ class DatabaseHelper {
     );
   }
 
-
   Future _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE codes(
@@ -164,13 +161,11 @@ class DatabaseHelper {
       ''');
   }
 
-
   Future<List<Code>> getCodes() async {
     Database db = await instance.database;
     var codes = await db.query('codes', orderBy: 'name');
-    List<Code> codeList = codes.isNotEmpty
-        ? codes.map((c) => Code.fromMap(c)).toList()
-        : [];
+    List<Code> codeList =
+        codes.isNotEmpty ? codes.map((c) => Code.fromMap(c)).toList() : [];
     return codeList;
   }
 
@@ -181,7 +176,6 @@ class DatabaseHelper {
 
   Future<int> remove(int id) async {
     Database db = await instance.database;
-    return await db.delete('codes', where: 'id = ?', whereArgs:  [id]);
+    return await db.delete('codes', where: 'id = ?', whereArgs: [id]);
   }
-
 }

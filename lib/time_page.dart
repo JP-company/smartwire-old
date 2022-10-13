@@ -1,20 +1,35 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 
 
 
-class DetailPage1 extends StatelessWidget {
-
+class TimePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
 
-    String date = Get.arguments; // docs[index]['date'] 값을 받아옴
+    String date = Get.arguments['date'];
+    String wire = Get.arguments['wire'];
+    dynamic title;
+    if(wire == "wire_1"){
+      title = '1번 와이어';
+    } else if(wire == "wire_2"){
+      title = '2번 와이어';
+    } else if(wire == "KM_wire_1"){
+      title = '2호기';
+    } else if(wire == "KM_wire_2"){
+      title = '3호기';
+    } else if(wire == "KM_wire_3"){
+      title = '4호기';
+    } else if(wire == "KM_wire_4"){
+      title = '5호기';
+    }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('1번 $date',style: TextStyle(
+        title: Text(title + ' ' + date,style: TextStyle(
             color: Colors.black),),
         leading: IconButton(
           onPressed: (){
@@ -28,7 +43,7 @@ class DetailPage1 extends StatelessWidget {
         backgroundColor: Colors.white,
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('wire_1/dates/$date').snapshots(),
+        stream: FirebaseFirestore.instance.collection(wire + '/dates/$date').snapshots(),
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if(snapshot.connectionState == ConnectionState.waiting){
@@ -81,7 +96,7 @@ class DetailPage1 extends StatelessWidget {
                 } else if (onoff == 'exit') {
                   onofftext = 'ERR';
                   onoffcolor = Color(0xffD7DF01);
-                  onoffstatus = '   알림 프로그램 애러';
+                  onoffstatus = '   알림 프로그램 꺼짐';
                 }
 
                 return ListTile(
