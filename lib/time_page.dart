@@ -22,9 +22,9 @@ class TimePage extends StatelessWidget {
     } else if(wire == "KM_wire_2"){
       title = '3호기';
     } else if(wire == "KM_wire_3"){
-      title = '4호기';
-    } else if(wire == "KM_wire_4"){
       title = '5호기';
+    } else if(wire == "KM_wire_4"){
+      title = '6호기';
     }
 
     return Scaffold(

@@ -244,9 +244,9 @@ class WireCard extends StatelessWidget {
                     } else if(num == '2'){
                       wirename = '3호기';
                     } else if(num == '3'){
-                      wirename = '4호기';
-                    } else if(num == '4'){
                       wirename = '5호기';
+                    } else if(num == '4'){
+                      wirename = '6호기';
                     }
                   }
 

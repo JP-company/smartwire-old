@@ -20,9 +20,9 @@ class DatePage extends StatelessWidget {
     } else if(company == "KM_wire_2"){
       title = '3호기 가동 기록';
     } else if(company == "KM_wire_3"){
-      title = '4호기 가동 기록';
-    } else if(company == "KM_wire_4"){
       title = '5호기 가동 기록';
+    } else if(company == "KM_wire_4"){
+      title = '6호기 가동 기록';
     }
     return Scaffold(
       appBar: AppBar(
@@ -75,11 +75,4 @@ class DatePage extends StatelessWidget {
       ),
     );
   }
-}
-
-class Arguments {
-  final String date;
-  final String wire;
-
-  Arguments(this.date, this.wire);
 }
