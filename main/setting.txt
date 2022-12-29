@@ -1,0 +1,4 @@
+KM_wire.exe
+c:/temp/KM_wire
+1
+1
