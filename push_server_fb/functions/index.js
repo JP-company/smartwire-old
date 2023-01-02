@@ -23,7 +23,7 @@ exports.push_notification_server =
       } else {
         usercollection =
           await admin.firestore().collection("users")
-              .doc("company").collection("km").get();
+              .doc("company").collection("sit").get();
       }
 
       let wireNum = "";

@@ -1,10 +1,12 @@
 from firebase_admin import credentials
 import firebase_admin
+import atexit
 from PIL import Image
 import time
 import pyautogui as pag
 from clients.Identifier import Identifier
 from clients.FirebaseServer import FirebaseServer
+from clients.DataCollector import DataCollector
 
 # exe 변환 명령어
 # pyinstaller -F --icon=.\wire.ico wire.py
@@ -13,137 +15,100 @@ from clients.FirebaseServer import FirebaseServer
 cred = credentials.Certificate('./serviceAccount.json')
 firebase_admin.initialize_app(cred)
 
-# 가동 상태 식별자 객체 생성
-idf = Identifier()
 
-# 파이어베이스 서버 연결 객체 생성
-fbsvr = FirebaseServer()
+class WireSolution:
+    idf = ''
+    fbsvr = ''
+    Wtype = ''
+    DC = ''
 
-# FirebaseServer의 Wtype 객체 주소 할당
-Wtype = fbsvr.Wtype
+    def __init__(self):
+        # 가동 상태 식별자 객체 생성
+        self.idf = Identifier()
 
-def five_min_stop(): # 5분 정지 감지 타이머
-    time.sleep(1)
-    for i in range(14):
-        if idf.referee(Wtype.model, "start") != "start":
+        # 파이어베이스 서버 연결 객체 생성
+        self.fbsvr = FirebaseServer()
+
+        # FirebaseServer의 Wtype 객체 주소 할당
+        self.Wtype = self.fbsvr.Wtype
+
+        # 데이터 수집기 객체 생성
+        self.DC = DataCollector()
+
+    def five_min_stop(self): # 5분 정지 감지 타이머
+        for i in range(15):
+            if self.idf.referee(self.Wtype.model, "start") != "start":
+                time.sleep(20)
+                if i == 14:
+                    return True
+            else:
+                break
+
+    def stopType(self): # 멈춤 종류 반환
+        if self.idf.referee(self.Wtype.model, "uncut") == "uncut": # 줄 씹힘
+            self.fbsvr.firebase('uncut', '와이어 선 씹힘')
+        elif self.idf.referee(self.Wtype.model, "nowire") == "nowire": # 와이어 선 부족
+            self.fbsvr.firebase('nowire', '와이어 선 부족')
+        elif self.idf.referee(self.Wtype.model, "finished") == "finished": # 작업완료
+            self.fbsvr.firebase('finished', '작업 종료')
+        elif self.idf.referee(self.Wtype.model, "contact") == "contact": # 와이어 선 접촉
+            self.fbsvr.firebase('contact', '와이어 선 접촉')
+        elif self.idf.referee(self.Wtype.model, "pause") == "pause": # 와이어 미동작
+            pag.click(680, 430)
             time.sleep(1)
+            pag.click(550, 720)
+            self.fbsvr.firebase('pause', '와이어 미동작')
+        elif self.idf.referee(self.Wtype.model, "moff") == "moff": # M코드 정지
+            self.fbsvr.firebase('moff', 'M코드 정지')
+        elif self.idf.referee(self.Wtype.model, 'start') == "stop": # 가동 정지
+            self.fbsvr.firebase('off', '가공 정지')
 
-def firststop(): #첫 멈춤
-    if idf.referee(Wtype.model, "uncut") == "uncut": # 줄 씹힘
-        fbsvr.firebase('uncut', '와이어 선 씹힘')
-    elif idf.referee(Wtype.model, "nowire") == "nowire": # 와이어 선 부족
-        fbsvr.firebase('nowire', '와이어 선 부족')
-    elif idf.referee(Wtype.model, "finished") == "finished": # 작업완료
-        fbsvr.firebase('finished', '작업 종료')
-    elif idf.referee(Wtype.model, "contact") == "contact": # 와이어 선 접촉
-        fbsvr.firebase('contact', '와이어 선 접촉')
-    elif idf.referee(Wtype.model, "pause") == "pause": # 와이어 미동작
-        pag.click(680, 430)
-        time.sleep(1)
-        pag.click(550, 720)
-        fbsvr.firebase('pause', '와이어 미동작')
-    elif idf.referee(Wtype.model, "moff") == "moff": # M코드 정지
-        fbsvr.firebase('moff', 'M코드 정지')
-    elif idf.referee(Wtype.model, 'start') == "stop": # 가동 정지
-        fbsvr.firebase('off', '가공 정지')
 
-def auto_start(): # 자동 재시작
-    pag.screenshot('wire.png', region=(607, 76, 73, 26))
-    img = Image.open('wire.png')
-    # num = list(pytesseract.image_to_string(img))
-    # real_num = num[2] + num[3] + num[4] + num[5] + num[6]
 
-    pag.click(793, 125) # 1. NC 편집 클릭
-    time.sleep(0.5)
-
-    pag.rightClick(940, 245) # 2. 줄에서 1~2개 위에 우클릭 
-    time.sleep(0.5)
-
-    pag.click(1000, 300) # 3. 셋 점프 라인
-    time.sleep(0.5)
-
-    pag.click(772, 720) # 스타트
-    time.sleep(300)
-
-    pag.click(772, 720) # 다시 스타트
+# 와이어 솔루션 객체 생성
+WS = WireSolution()
 
 # 예기치 못한 프로그램 종료 시 수행
-# atexit.register(fbsvr.exit_handler())
+atexit.register(WS.fbsvr.exit_handler)
 
 
 print("-------와이어 알림 프로그램 시작-------")
-# time.sleep(10)
+time.sleep(10)
 
-if idf.referee(Wtype.model, 'start') == "start": # 가동중일때
+# 최초 프로그램 시작 시 멈춰있을때
+if WS.idf.referee(WS.Wtype.model, 'start') != "start":
+    WS.stopType()
+
+
+while True:
+    # 가동 시작 감지
     while True:
-        while True:
-            time.sleep(10)
-            if idf.referee(Wtype.model, 'start') == "start": # 최초 초록불 확인, 퇴근 후
-                fbsvr.firebase('on', '가공 시작')
+        time.sleep(1) # 1초마다
+
+        # 원격 제어로 가동 시키는지
+        WS.DC.completeFlag = False
+        while WS.DC.remote_check() == True:
+            # if WS.DC.click_checker() ==True:
+            if WS.idf.referee(WS.Wtype.model, 'start') == "start":
+                WS.fbsvr.remote_data()
+                WS.fbsvr.firebase('on', '[원격 제어] 가공 시작')
+                WS.DC.completeFlag = True
+                # WS.DC.pos = []
                 break
-        while True:
-            time.sleep(10)
-            if idf.referee(Wtype.model, 'start') != "start": # 최초 회색불 감지, 퇴근 후
-                five_min_stop() # 5분 동안 20초 간격으로 회색불 확인
-                if idf.referee(Wtype.model, "uncut") == "uncut": # 줄 씹힘
-                    fbsvr.firebase('uncut', '와이어 선 씹힘')
-                    break
-                elif idf.referee(Wtype.model, "nowire") == "nowire": # 와이어 선 부족
-                    fbsvr.firebase('nowire', '와이어 선 부족')
-                    break
-                elif idf.referee(Wtype.model, "finished") == "finished": # 작업종료
-                    fbsvr.firebase('finished', '작업 종료')
-                    break
-                elif idf.referee(Wtype.model, "contact") == "contact": # 와이어 선 접촉
-                    fbsvr.firebase('contact', '와이어 선 접촉')
-                    break
-                elif idf.referee(Wtype.model, "moff") == "moff": # M코드 정지
-                    fbsvr.firebase('moff', 'M코드 정지')
-                    break
-                elif idf.referee(Wtype.model, "pause") == "pause": # 와이어 미동작
-                    pag.click(680, 430)
-                    time.sleep(1)
-                    pag.click(550, 720)
-                    fbsvr.firebase('pause', '와이어 미동작')
-                    break
-                elif idf.referee(Wtype.model, 'start') == "stop": # 와이어 줄 연결 실패
-                    fbsvr.firebase('off', '가공 정지')
-                    break
-else: # 멈춰있을때
-    date=time.strftime("%Y-%m-%d")
-    now=time.strftime("%H:%M:%S")
-    firststop()
+        if WS.DC.completeFlag:
+            break
+
+        # 초록불 감지, 퇴근 후
+        if WS.idf.referee(WS.Wtype.model, 'start') == "start": 
+            WS.fbsvr.firebase('on', '가공 시작')
+            break
+
+    # 가동 정지 감지
     while True:
-        while True:
-            if idf.referee(Wtype.model, 'start') == "start": # 최초 초록불 확인, 퇴근 후
-                time.sleep(10)
-                fbsvr.firebase('on', '가공 시작')
-                break
-        while True:
-            if idf.referee(Wtype.model, 'start') != "start": # 최초 회색불 감지, 퇴근 후
-                time.sleep(10)
-                five_min_stop() # 5분 동안 20초 간격으로 회색불 확인
-                if idf.referee(Wtype.model, "uncut") == "uncut": # 줄 씹힘
-                    fbsvr.firebase('uncut', '와이어 선 씹힘')
-                    break
-                elif idf.referee(Wtype.model, "nowire") == "nowire": # 와이어 선 부족
-                    fbsvr.firebase('nowire', '와이어 선 부족')
-                    break
-                elif idf.referee(Wtype.model, "finished") == "finished": # 작업종료
-                    fbsvr.firebase('finished', '작업 종료')
-                    break
-                elif idf.referee(Wtype.model, "contact") == "contact": # 와이어 선 접촉
-                    fbsvr.firebase('contact', '와이어 선 접촉')
-                    break
-                elif idf.referee(Wtype.model, "moff") == "moff": # M코드 정지
-                    fbsvr.firebase('moff', 'M코드 정지')
-                    break
-                elif idf.referee(Wtype.model, "pause") == "pause": # 와이어 미동작
-                    pag.click(680, 430)
-                    time.sleep(1)
-                    pag.click(550, 720)
-                    fbsvr.firebase('pause', '와이어 미동작')
-                    break
-                elif idf.referee(Wtype.model, 'start') == "stop": # 와이어 줄 연결 실패
-                    fbsvr.firebase('off', '가공 정지')
-                    break
+        time.sleep(1) # 1초마다
+
+        # 회색불 감지, 퇴근 후
+        if WS.idf.referee(WS.Wtype.model, 'start') != "start": 
+            if WS.five_min_stop() == True: # 5분 동안 20초 간격으로 회색불 확인
+                WS.stopType() # 멈춤 종류 반환
+                break                  

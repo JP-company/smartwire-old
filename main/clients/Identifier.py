@@ -2,8 +2,10 @@ from PIL import ImageGrab
 
 class Identifier:
     cdn_list = [(0,0)] * 5
+
     case = ""
     model = ""
+
     green = (0, 255, 0)
     grey = (194, 194, 194)
     red = (255, 0, 0)
@@ -79,12 +81,10 @@ class Identifier:
         
         # 값 반환
         # 초록색이 아니면 멈췄다고 판단
-        if (color(0) and color(1) and color(2) and color(3)) == self.green:
+        if color(0) == self.green and color(1) == self.green and color(2) == self.green and color(3) == self.green:
             return self.case
         else:
-            if color(0) == self.red: # 해당 멈춤 케이스가 빨간불이라면
-                if (color(1) and color(2)) == self.red: # 선 씹힘 케이스
-                    return self.case
-                elif self.case != "uncut": # 선 씹힘 케이스
+            if color(0) == self.red or color(1) == self.red or color(2) == self.red: # 해당 멈춤 케이스가 빨간불이라면
+                if color(3) != self.red:
                     return self.case
             return "stop"

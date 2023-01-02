@@ -1,5 +1,9 @@
 class WireType:
-    wire_num = [] # 와이어 기계 종류
+    
+    # 와이어 기계 종류
+    wire_num = [] 
+    
+    # 이름 할당
     model = '' 
     file = ''
 
