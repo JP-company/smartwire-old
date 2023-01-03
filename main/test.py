@@ -1,90 +1,44 @@
-# import psutil
-# import time
-# from pynput import mouse
+import pyautogui as pag
+from PIL import Image
+import pytesseract
+import datetime as dt
 
-# def on_click(x, y, button, pressed):
-#     if button == mouse.Button.left and pressed:
-#         print("Mouse button clicked at ({}, {})".format(x, y))
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files (x86)\Tesseract-OCR\tesseract.exe'
 
-# # 원격 프로그램(팀뷰어, 크롬 원격 데스크톱) 감지
-# def remote_check():
-#     processList = []
-#     for proc in psutil.process_iter():
-#         processName = proc.name()
-#         processList.append(processName)
-#     return processList
+# 남은 거리
+pag.screenshot('wire1.png', region=(670, 600, 160, 16))
+# pag.screenshot('wire1.png', region=(665, 595, 170, 25))
 
-# while True:
-#     processList = remote_check()
-#     while "TeamViewer_Desktop.exe" in processList or "remoting_desktop.exe" in processList:
-#         processList = remote_check()
-#         print("원격프로그램 실행중")
-#         time.sleep(2)
-#     print("원격프로그램 꺼짐")
-#     time.sleep(2)
+# 재료 T 두께
+pag.screenshot('wire2.png', region=(320, 525, 47, 24))
 
+# 걸린 시간
+# pag.screenshot('wire3.png', region=(665, 639, 130, 25))
+pag.screenshot('wire3.png', region=(750, 642, 42, 19))
 
-a=0
-b=1
+img_1 = Image.open('wire1.png')
+img_2 = Image.open('wire2.png')
+img_3 = Image.open('wire3.png')
+num1 = pytesseract.image_to_string(img_1)
+num2 = pytesseract.image_to_string(img_2)
+num3 = pytesseract.image_to_string(img_3)
+print('가공 전 남은 거리:',num1)
+print('가공 전 T 두께:',num2)
+print('가공 전 걸린 시간:',num3)
+remain = int(num1.split('.')[0])
+T = int(num2.split('.')[0])
 
-if (a and b) == 0:
-    print('ㅋㅋ')
-else:
-    print('ㅠㅠ')
-
+print('\n남은 거리:', remain)
+print('재료 T 두께:', T)
 
 
+# 재료 T
+# (95 ,339 , 40, 18)
 
-import time
-import mouse
+# 남은거리
+# (395, 400, 135, 15)
 
-# def on_click(x, y, button, pressed):
-#     print('Button: %s, Position: (%s, %s), Pressed: %s ' %(button, x, y, pressed))
-#     return False
-
-# with mouse.Listener(on_click=on_click) as listener:
-#     listener.join()
-
-
-# pos = []
-# while True:
-#     if mouse.is_pressed("left"):
-#         pos.append(mouse.get_position())
-#         pos = list(set(pos))
-#         print(pos)
-#         time.sleep(0.1)
-#         for i in pos:
-#             if 742 <= i[0] and i[0] <= 794 and 525 <= i[1] and i[1] <= 577:
-#                 print(i, '적중')
-
-
-
-
-
-# list = []
-
-# list.insert(0, (0,1))
-
-# # print(list)
-
-# a=0
-# b=0
-# if (a and b) == 0:
-#     print(112)
-
-# import pyautogui as pag
-# print(pag.position())
-
-# def hi():
-#     for i in range(15):
-#         if i == 14:
-#             return True
-
-# print(hi())
-# for i in range(15):
-#         if idf.referee(Wtype.model, "start") != "start":
-#             time.sleep(20)
-#             if i == 14:
-#                 return True
-#         else:
-#             break
+# 방전시간
+# (388, 433, 112, 23)d
+y = dt.datetime.strptime = ("%d"%num3, "%H:%M")
+print('시간 변환', y)

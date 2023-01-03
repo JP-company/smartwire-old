@@ -4,6 +4,7 @@ import pyautogui as pag
 from firebase_admin import firestore
 import pyrebase
 from clients.WireType import WireType
+from clients.DataCollector import DataCollector
 
 class FirebaseServer:
     # 현재 시간 
@@ -20,8 +21,11 @@ class FirebaseServer:
     ss_date = ""
     ss_now = ""
 
-    # 와이어 종류 확인용
+    # 와이어 종류 확인 참조변수
     Wtype = ""
+
+    # 원격제어 데이터 수집기 참조변수
+    DC = ""
 
 
     def __init__(self):
@@ -43,7 +47,10 @@ class FirebaseServer:
         # 와이어 종류 객체 생성
         self.Wtype = WireType()
 
-    def internet_cheker(self): #인터넷 연결 확인
+        # 데이터 수집기 객체 생성
+        self.DC = DataCollector()
+
+    def internet_checker(self): #인터넷 연결 확인
         ip_address = socket.gethostbyname(socket.gethostname())
         if ip_address == '127.0.0.1':
             return False
@@ -78,8 +85,8 @@ class FirebaseServer:
         self.ss_date = time.strftime("%Y%m%d")
         self.ss_now = time.strftime("%H%M%S")
 
-        # 인터넷 불안정 변수
-        connect_checker = 0
+        # 인터넷 불안정 확인 변수
+        disconnect = False
 
         # 인터넷 ip 따기
         log = open("log_ip.txt", 'a')
@@ -89,17 +96,17 @@ class FirebaseServer:
         log.close()
 
         # 인터넷이 연결이 안되었을때
-        if self.internet_cheker() == False:
+        if self.internet_checker() == False:
             print(self.date, self.now, '인터넷 연결이 불안정합니다.')
             # 불안정 했다는 기록 남김
-            connect_checker = 1
+            disconnect = True
 
         # 인터넷 연결 될때까지 무한 루프
         while True:
             # 연결 되었을 때
-            if self.internet_cheker() == True:
+            if self.internet_checker() == True:
                 # 인터넷이 전에 불안정 했다면 서버에 기록
-                if connect_checker == 1:
+                if disconnect:
                     wire_internet = self.db.collection(u'%s'%self.Wtype.model).document(u'dates').collection('internet').document(u'%s %s'%(self.date, self.now))
                     wire_internet.set({
                     u'internet' : u'disconnected'
@@ -128,6 +135,8 @@ class FirebaseServer:
                 u'time' : u'%s %s'%(self.date, self.now),
             })
             self.screenshot(coment)
+            
+
 
         print(self.date, self.now,'%s'%coment)
 

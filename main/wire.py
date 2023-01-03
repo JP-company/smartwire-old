@@ -35,14 +35,24 @@ class WireSolution:
         # 데이터 수집기 객체 생성
         self.DC = DataCollector()
 
-    def five_min_stop(self): # 5분 정지 감지 타이머
-        for i in range(15):
+    def three_min_stop(self): # 3분 정지 감지 타이머
+        for i in range(180):
             if self.idf.referee(self.Wtype.model, "start") != "start":
-                time.sleep(20)
-                if i == 14:
+                time.sleep(1)
+                if i == 179:
                     return True
             else:
                 break
+
+    def one_min_start(self): # 1분 시작 감지 타이머
+        for i in range(60):
+            if self.idf.referee(self.Wtype.model, "start") == "start":
+                time.sleep(1)
+                if i == 59:
+                    return True
+            else:
+                break
+    
 
     def stopType(self): # 멈춤 종류 반환
         if self.idf.referee(self.Wtype.model, "uncut") == "uncut": # 줄 씹힘
@@ -88,18 +98,16 @@ while True:
         # 원격 제어로 가동 시키는지
         WS.DC.completeFlag = False
         while WS.DC.remote_check() == True:
-            # if WS.DC.click_checker() ==True:
             if WS.idf.referee(WS.Wtype.model, 'start') == "start":
                 WS.fbsvr.remote_data()
                 WS.fbsvr.firebase('on', '[원격 제어] 가공 시작')
                 WS.DC.completeFlag = True
-                # WS.DC.pos = []
                 break
         if WS.DC.completeFlag:
             break
 
-        # 초록불 감지, 퇴근 후
-        if WS.idf.referee(WS.Wtype.model, 'start') == "start": 
+        # 초록불 1분간 1초 간격 감지, 퇴근 후
+        if WS.one_min_start() == True:
             WS.fbsvr.firebase('on', '가공 시작')
             break
 
@@ -107,8 +115,7 @@ while True:
     while True:
         time.sleep(1) # 1초마다
 
-        # 회색불 감지, 퇴근 후
-        if WS.idf.referee(WS.Wtype.model, 'start') != "start": 
-            if WS.five_min_stop() == True: # 5분 동안 20초 간격으로 회색불 확인
-                WS.stopType() # 멈춤 종류 반환
-                break                  
+        # 회색불 3분간 1초 간격 감지, 퇴근 후
+        if WS.three_min_stop() == True:
+            WS.stopType() # 멈춤 종류 반환
+            break                  
