@@ -3,8 +3,10 @@ import time
 import pyautogui as pag
 from firebase_admin import firestore
 import pyrebase
+from PIL import Image
 from clients.WireType import WireType
 from clients.DataCollector import DataCollector
+import pytesseract
 
 class FirebaseServer:
     # 현재 시간 
@@ -43,6 +45,7 @@ class FirebaseServer:
         firebase = pyrebase.initialize_app(firebaseConfig)
         self.strg = firebase.storage()
         self.db = firestore.client()
+        pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
         # 와이어 종류 객체 생성
         self.Wtype = WireType()
@@ -71,8 +74,36 @@ class FirebaseServer:
 
     def screenshot(self, status): # 스크린샷 저장
         fileName = "{}{}{}{}{}{}{}{}{}".format('screenshots/','%s'%self.Wtype.file, ' - ', self.ss_date[2:], '_', self.ss_now, '_', status, '.png')
-        pag.screenshot(fileName)
+        img= pag.screenshot(fileName)
         self.strg.child('{}{}{}'.format('%s'%self.Wtype.file, '/', fileName)).put(fileName)
+        if self.DC.completeFlag:
+            areaRemainDistance = (395, 400, 530, 415)
+            areaThickness = (90, 336, 170, 358)
+            areaRunTime = (460, 430, 500, 455)
+            pag.screenshot('wire1.png', region=(395, 400, 135, 15))
+            pag.screenshot('wire2.png', region=(90, 336, 80, 22))
+            pag.screenshot('wire3.png', region=(460, 430, 40, 25))
+            img_1 = Image.open('wire1.png')
+            img_2 = Image.open('wire2.png')
+            img_3 = Image.open('wire3.png')
+            num1 = pytesseract.image_to_string(img_1)
+            num2 = pytesseract.image_to_string(img_2)
+            num3 = pytesseract.image_to_string(img_3)
+            print('남은거리:', num1)
+            print('두께:', num2)
+            print('방전시간:', num3)
+            print('----------')
+            cropRemainDistance = img.crop(areaRemainDistance)
+            cropThickness = img.crop(areaThickness)
+            cropRunTime = img.crop(areaRunTime)
+            RemainDistance = pytesseract.image_to_string(cropRemainDistance)
+            Thickness = pytesseract.image_to_string(cropThickness)
+            RunTime = pytesseract.image_to_string(cropRunTime)
+            print('남은거리:', RemainDistance)
+            print('두께:', Thickness)
+            print('방전시간:', RunTime)
+            self.remote_data(RemainDistance, Thickness, RunTime)
+
 
     def firebase(self, data, coment): # 서버 연결
         # 호출 시 현재시간 저장
@@ -166,12 +197,15 @@ class FirebaseServer:
 
         self.screenshot('꺼짐')
 
-    def remote_data(self): # 원격제어로 재가동한 사례 모음
+    def remote_data(self, RemainDistance, Thickness, RunTime): # 원격제어로 재가동한 사례 모음
         self.date = time.strftime("%Y-%m-%d")
         self.now = time.strftime("%H:%M:%S")
         wire_push = self.db.collection(u'remote_data').document(u'%s'%self.Wtype.model).collection(u'%s'%self.date).document(u'%s'%self.now)
         wire_push.set({
             u'remote_start' : u'yes',
             u'time' : u'%s %s'%(self.date, self.now),
-            u'wire' : u'%s'%self.Wtype.model
+            u'wire' : u'%s'%self.Wtype.model,
+            u'remain_distance' : u'%s'%RemainDistance,
+            u'thickness' : u'%s'%Thickness,
+            u'RunTime' : u'%s'%RunTime
         })

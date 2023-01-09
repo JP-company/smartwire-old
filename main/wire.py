@@ -1,12 +1,10 @@
 from firebase_admin import credentials
 import firebase_admin
 import atexit
-from PIL import Image
 import time
 import pyautogui as pag
 from clients.Identifier import Identifier
 from clients.FirebaseServer import FirebaseServer
-from clients.DataCollector import DataCollector
 
 # exe 변환 명령어
 # pyinstaller -F --icon=.\wire.ico wire.py
@@ -23,20 +21,20 @@ class WireSolution:
     DC = ''
 
     def __init__(self):
-        # 가동 상태 식별자 객체 생성
+        # 가동상태 식별자 객체 생성
         self.idf = Identifier()
 
-        # 파이어베이스 서버 연결 객체 생성
+        # 파이어베이스 서버연결 객체 생성
         self.fbsvr = FirebaseServer()
 
         # FirebaseServer의 Wtype 객체 주소 할당
         self.Wtype = self.fbsvr.Wtype
 
-        # 데이터 수집기 객체 생성
-        self.DC = DataCollector()
+        # FirebaseServer의 DC 객체 주소 할당
+        self.DC = self.fbsvr.DC
 
-    def three_min_stop(self): # 3분 정지 감지 타이머
-        for i in range(180):
+    def four_min_stop(self): # 3분 정지 감지 타이머
+        for i in range(240):
             if self.idf.referee(self.Wtype.model, "start") != "start":
                 time.sleep(1)
                 if i == 179:
@@ -99,11 +97,10 @@ while True:
         WS.DC.completeFlag = False
         while WS.DC.remote_check() == True:
             if WS.idf.referee(WS.Wtype.model, 'start') == "start":
-                WS.fbsvr.remote_data()
-                WS.fbsvr.firebase('on', '[원격 제어] 가공 시작')
                 WS.DC.completeFlag = True
+                WS.fbsvr.firebase('on', '[원격 제어] 가공 시작')
                 break
-        if WS.DC.completeFlag:
+        if WS.DC.completeFlag:   
             break
 
         # 초록불 1분간 1초 간격 감지, 퇴근 후
@@ -115,7 +112,7 @@ while True:
     while True:
         time.sleep(1) # 1초마다
 
-        # 회색불 3분간 1초 간격 감지, 퇴근 후
-        if WS.three_min_stop() == True:
+        # 회색불 4분간 1초 간격 감지, 퇴근 후
+        if WS.four_min_stop() == True:
             WS.stopType() # 멈춤 종류 반환
             break                  

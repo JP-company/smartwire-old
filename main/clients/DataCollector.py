@@ -1,6 +1,5 @@
 import psutil
 import mouse
-import time
 
 
 class DataCollector:
