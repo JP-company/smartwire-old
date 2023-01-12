@@ -3,6 +3,8 @@ import win32api
 import time
 import pyautogui as pag
 
+# pyinstaller -F --icon=.\setting\restart.ico restart.py
+
 file_name_w = open("./main/setting/setting.txt", "a", encoding='utf-8') # 파일 이름 쓰기 변수 할당
 file_name_r = open("./main/setting/setting.txt", "r", encoding='utf-8') # 파일 이름 읽기 변수 할당
 
@@ -38,7 +40,7 @@ while True:
         root = file_name[1][0:-1] + '/' + file_name[0][0:-1]
         win32api.ShellExecute(0, "open", root, None, None, 1)
 
-        log = open("log.txt", 'a')
+        log = open("./main/setting/restart_log.txt", 'a')
         log_contents = date + ' ' + now + ' ' + '재실행 로그' + '\n'
         log.write(log_contents)
         log.close()

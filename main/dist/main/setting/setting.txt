@@ -1,0 +1,4 @@
+wire.exe
+C:\Users\wjsdj\Desktop\SITWIRE\main\dist
+1
+1

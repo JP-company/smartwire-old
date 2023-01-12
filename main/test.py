@@ -52,7 +52,3 @@
 # y = y - x
 # print('시간 변환:', y)
 
-import time 
-print("ok")
-time.sleep(1)
-print(43)

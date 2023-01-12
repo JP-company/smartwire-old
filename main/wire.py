@@ -8,7 +8,7 @@ from clients.FirebaseServer import FirebaseServer
 
 
 # exe 변환 명령어
-# pyinstaller -F --icon=.\wire.ico wire.py
+# pyinstaller -F --icon=.\setting\wire.ico wire.py
 
 # firebase 계정 연결
 cred = credentials.Certificate('./main/setting/serviceAccount.json')
@@ -34,7 +34,7 @@ class WireSolution:
         # FirebaseServer의 DC 객체 주소 할당
         self.DC = self.fbsvr.DC
 
-    def four_min_stop(self): # 3분 정지 감지 타이머
+    def four_min_stop(self): # 4분 정지 감지 타이머
         for i in range(240):
             if self.idf.referee(self.Wtype.model, "start") != "start":
                 time.sleep(1)
