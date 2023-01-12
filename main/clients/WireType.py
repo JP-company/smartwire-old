@@ -12,8 +12,8 @@ class WireType:
 
     # 와이어 기계 종류 파일 읽어오기, 없으면 생성
     def file_reader(self):
-        file_write = open("./wire_num.txt", "a")
-        file_read = open("./wire_num.txt", "r")
+        file_write = open("./main/setting/wire_num.txt", "a")
+        file_read = open("./main/setting/wire_num.txt", "r")
 
         # 파일 내용 읽어오기
         self.wire_num = file_read.readlines()

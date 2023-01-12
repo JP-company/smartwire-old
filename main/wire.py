@@ -1,16 +1,17 @@
-from firebase_admin import credentials
 import firebase_admin
+from firebase_admin import credentials
 import atexit
 import time
 import pyautogui as pag
 from clients.Identifier import Identifier
 from clients.FirebaseServer import FirebaseServer
 
+
 # exe 변환 명령어
 # pyinstaller -F --icon=.\wire.ico wire.py
 
 # firebase 계정 연결
-cred = credentials.Certificate('./serviceAccount.json')
+cred = credentials.Certificate('./main/setting/serviceAccount.json')
 firebase_admin.initialize_app(cred)
 
 
@@ -81,7 +82,7 @@ atexit.register(WS.fbsvr.exit_handler)
 
 
 print("-------와이어 알림 프로그램 시작-------")
-time.sleep(10)
+# time.sleep(10)
 
 # 최초 프로그램 시작 시 멈춰있을때
 if WS.idf.referee(WS.Wtype.model, 'start') != "start":

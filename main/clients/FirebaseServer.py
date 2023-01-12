@@ -73,7 +73,7 @@ class FirebaseServer:
             return True
 
     def screenshot(self, status): # 스크린샷 저장
-        fileName = "{}{}{}{}{}{}{}{}{}".format('screenshots/','%s'%self.Wtype.file, ' - ', self.ss_date[2:], '_', self.ss_now, '_', status, '.png')
+        fileName = "{}{}{}{}{}{}{}{}{}".format('main/screenshots/','%s'%self.Wtype.file, ' - ', self.ss_date[2:], '_', self.ss_now, '_', status, '.png')
         img= pag.screenshot(fileName)
         self.strg.child('{}{}{}'.format('%s'%self.Wtype.file, '/', fileName)).put(fileName)
         if self.DC.completeFlag:
@@ -120,7 +120,7 @@ class FirebaseServer:
         disconnect = False
 
         # 인터넷 ip 따기
-        log = open("log_ip.txt", 'a')
+        log = open("./main/setting/log_ip.txt", 'a')
         ip_address_2 = socket.gethostbyname(socket.gethostname())
         log_ip = self.date + ' ' + self.now + ' ' + ip_address_2 + '\n'
         log.write(log_ip)

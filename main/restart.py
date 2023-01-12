@@ -3,8 +3,8 @@ import win32api
 import time
 import pyautogui as pag
 
-file_name_w = open("setting.txt", "a", encoding='utf-8') # 파일 이름 쓰기 변수 할당
-file_name_r = open("setting.txt", "r", encoding='utf-8') # 파일 이름 읽기 변수 할당
+file_name_w = open("./main/setting/setting.txt", "a", encoding='utf-8') # 파일 이름 쓰기 변수 할당
+file_name_r = open("./main/setting/setting.txt", "r", encoding='utf-8') # 파일 이름 읽기 변수 할당
 
 file_name = file_name_r.readlines() # 파일 이름 읽어옴
 
