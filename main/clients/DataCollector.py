@@ -17,7 +17,7 @@ class DataCollector:
             processList.append(processName)
             
         # 크롬 원격 데스크톱 remoting_host.exe
-        if "TeamViewer_Desktop.exe" in processList:
+        if "TeamViewer_Desktop.exe" in processList or "remoting_host.exe":
             return True
         
 
