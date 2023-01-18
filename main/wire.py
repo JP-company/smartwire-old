@@ -79,7 +79,6 @@ class WireSolution:
             self.fbsvr.firebase('off', '가공 정지')
 
 
-
 # 와이어 솔루션 객체 생성
 WS = WireSolution()
 
@@ -88,7 +87,7 @@ atexit.register(WS.fbsvr.exit_handler)
 
 
 print("-------와이어 알림 프로그램 시작-------")
-time.sleep(10)
+# time.sleep(10)
 
 # 최초 프로그램 시작 시 멈춰있을때
 if WS.idf.referee(WS.fbsvr.Wtype.model, 'start') != "start":
@@ -98,12 +97,13 @@ if WS.idf.referee(WS.fbsvr.Wtype.model, 'start') != "start":
 
 while True:
     # 가동 시작 감지
+
     while True:
         time.sleep(1) # 1초마다
 
         # 원격 제어로 가동 시키는지
         WS.fbsvr.DC.completeFlag = False
-        while WS.fbsvr.DC.remote_check() == True:
+        while WS.fbsvr.DC.remote_check():
             if WS.idf.referee(WS.fbsvr.Wtype.model, 'start') == "start":
                 WS.set_time()
                 WS.fbsvr.DC.completeFlag = True
@@ -113,15 +113,28 @@ while True:
             break
 
         # 초록불 1분간 1초 간격 감지, 퇴근 후
-        if WS.one_min_start() == True:
+        # if WS.one_min_start():
+        #     WS.fbsvr.firebase('on', '가공 시작')
+        #     break
+
+        # 스크린샷 다찍기
+        if WS.idf.referee(WS.fbsvr.Wtype.model, 'start') == "start":
+            WS.set_time()
             WS.fbsvr.firebase('on', '가공 시작')
             break
+
 
     # 가동 정지 감지
     while True:
         time.sleep(1) # 1초마다
 
         # 회색불 4분간 1초 간격 감지, 퇴근 후
-        if WS.four_min_stop() == True:
-            WS.stopType() # 멈춤 종류 반환
-            break                  
+        # if WS.four_min_stop():
+        #     WS.stopType() # 멈춤 종류 반환
+        #     break
+
+        # 다 찍기
+        if WS.idf.referee(WS.fbsvr.Wtype.model, "start") != "start":
+            WS.set_time()
+            WS.stopType()
+            break

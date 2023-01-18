@@ -73,31 +73,31 @@ class FirebaseServer:
             return True
 
     def screenshot(self, status): # 스크린샷 저장
-        fileName = "{}{}{}{}{}{}{}{}{}".format('main/screenshots/','%s'%self.Wtype.file, ' - ', self.ss_date[2:], '_', self.ss_now, '_', status, '.png')
-        img= pag.screenshot(fileName)
-        self.strg.child('{}{}{}'.format('%s'%self.Wtype.file, '/', fileName)).put(fileName)
+        fileName = "{}{}{}{}{}{}{}{}{}".format('main_screenshots/','%s'%self.Wtype.file, ' - ', self.ss_date[2:], '_', self.ss_now, '_', status, '.png')
+        pag.screenshot(fileName)
+        # self.strg.child('{}{}{}'.format('%s'%self.Wtype.file, '/', fileName)).put(fileName)
         
         # 만약에 원격제어중이면
         # if self.DC.completeFlag:
 
-        # 남은거리 좌표
-        areaRemainDistance = (395, 400, 530, 415)
-        # 재료 T
-        areaThickness = (94, 338, 134, 357)
-        # 방전시간
-        areaRunTime = (460, 430, 500, 455)
+        # # 남은거리 좌표
+        # areaRemainDistance = (395, 400, 530, 415)
+        # # 재료 T
+        # areaThickness = (94, 338, 134, 357)
+        # # 방전시간
+        # areaRunTime = (460, 430, 500, 455)
 
-        # 이미지 자르기
-        cropRemainDistance = img.crop(areaRemainDistance)
-        cropThickness = img.crop(areaThickness)
-        cropRunTime = img.crop(areaRunTime)
+        # # 이미지 자르기
+        # cropRemainDistance = img.crop(areaRemainDistance)
+        # cropThickness = img.crop(areaThickness)
+        # cropRunTime = img.crop(areaRunTime)
 
-        # pytesseract로 이미지 -> 문자열 변환
-        RemainDistance = pytesseract.image_to_string(cropRemainDistance)
-        Thickness = pytesseract.image_to_string(cropThickness)
-        RunTime = pytesseract.image_to_string(cropRunTime)
+        # # pytesseract로 이미지 -> 문자열 변환
+        # RemainDistance = pytesseract.image_to_string(cropRemainDistance)
+        # Thickness = pytesseract.image_to_string(cropThickness)
+        # RunTime = pytesseract.image_to_string(cropRunTime)
 
-        self.remote_data(RemainDistance, Thickness, RunTime)
+        # self.remote_data(RemainDistance, Thickness, RunTime)
 
 
     def firebase(self, data, coment): # 서버 연결
@@ -121,7 +121,7 @@ class FirebaseServer:
         # 인터넷 연결 될때까지 무한 루프
         while True:
             # 연결 되었을 때
-            if self.internet_checker() == True:
+            if self.internet_checker():
                 # 인터넷이 전에 불안정 했다면 서버에 기록
                 if disconnect:
                     wire_internet = self.db.collection(u'%s'%self.Wtype.model).document(u'dates').collection('internet').document(u'%s %s'%(self.date, self.now))
@@ -145,7 +145,7 @@ class FirebaseServer:
         })
 
         # 서버 - 퇴근 시간 이후에만 푸쉬서버에 알림을 보냄
-        if self.afterwork() == True:
+        if self.afterwork():
             wire_push = self.db.collection(u'push_server').document(u'%s'%self.Wtype.model)
             wire_push.set({
                 u'push' : u'%s'%data,
