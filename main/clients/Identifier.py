@@ -14,7 +14,6 @@ class Identifier:
     def __init__(self):
         pass
 
-
     # 회사별 좌표값 할당 메서드
     def coordinateCollector(self, model, case):
         
@@ -41,7 +40,7 @@ class Identifier:
                 self.cdn_list[0] = (1120, 165)
                 self.cdn_list[1] = (1120, 200)
                 self.cdn_list[2] = (1120, 230)
-            elif case == "start": # 시작 감지 좌표
+            elif case == "start" or case == 'off': # 시작 감지 좌표
                 self.cdn_list[0] = (765,700)
                 self.cdn_list[1] = (710, 700)
                 self.cdn_list[2] = (665, 700)
@@ -65,8 +64,6 @@ class Identifier:
                 self.cdn_list[3] = (610, 690)
                 self.cdn_list[4] = (590, 750)
 
-
-
     # 작동 상태 값 반환 메서드
     def referee(self, model, case):
 
@@ -87,4 +84,4 @@ class Identifier:
             if color(0) == self.red or color(1) == self.red or color(2) == self.red: # 해당 멈춤 케이스가 빨간불이라면
                 if color(3) != self.red:
                     return self.case
-            return "stop"
+            return "off"

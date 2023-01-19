@@ -60,23 +60,31 @@ class WireSolution:
                 break
 
     def stopType(self): # 멈춤 종류 반환
-        if self.idf.referee(self.fbsvr.Wtype.model, "uncut") == "uncut": # 줄 씹힘
-            self.fbsvr.firebase('uncut', '와이어 선 씹힘')
-        elif self.idf.referee(self.fbsvr.Wtype.model, "nowire") == "nowire": # 와이어 선 부족
-            self.fbsvr.firebase('nowire', '와이어 선 부족')
-        elif self.idf.referee(self.fbsvr.Wtype.model, "finished") == "finished": # 작업완료
-            self.fbsvr.firebase('finished', '작업 종료')
-        elif self.idf.referee(self.fbsvr.Wtype.model, "contact") == "contact": # 와이어 선 접촉
-            self.fbsvr.firebase('contact', '와이어 선 접촉')
-        elif self.idf.referee(self.fbsvr.Wtype.model, "pause") == "pause": # 와이어 미동작
-            pag.click(680, 430)
-            time.sleep(1)
-            pag.click(550, 720)
-            self.fbsvr.firebase('pause', '와이어 미동작')
-        elif self.idf.referee(self.fbsvr.Wtype.model, "moff") == "moff": # M코드 정지
-            self.fbsvr.firebase('moff', 'M코드 정지')
-        elif self.idf.referee(self.fbsvr.Wtype.model, 'start') == "stop": # 가동 정지
-            self.fbsvr.firebase('off', '가공 정지')
+        stopType = ['uncut', 'nowire', 'finished', 'contact', 'pause', 'moff', 'off']
+        printResult = ['와이어 선 씹힘', '와이어 선 부족', '작업 종료', '와이어 선 접촉', '와이어 미동작', 'M코드 정지', '가공 정지']
+        index = 0
+        for stopCode in stopType:
+            if self.idf.referee(self.fbsvr.Wtype.model, stopCode) == stopCode:
+                self.fbsvr.firebase(stopCode, printResult[index])
+            index += 1
+
+        # if self.idf.referee(self.fbsvr.Wtype.model, "uncut") == "uncut": # 줄 씹힘
+        #     self.fbsvr.firebase('uncut', '와이어 선 씹힘')
+        # elif self.idf.referee(self.fbsvr.Wtype.model, "nowire") == "nowire": # 와이어 선 부족
+        #     self.fbsvr.firebase('nowire', '와이어 선 부족')
+        # elif self.idf.referee(self.fbsvr.Wtype.model, "finished") == "finished": # 작업완료
+        #     self.fbsvr.firebase('finished', '작업 종료')
+        # elif self.idf.referee(self.fbsvr.Wtype.model, "contact") == "contact": # 와이어 선 접촉
+        #     self.fbsvr.firebase('contact', '와이어 선 접촉')
+        # elif self.idf.referee(self.fbsvr.Wtype.model, "pause") == "pause": # 와이어 미동작
+        #     pag.click(680, 430)
+        #     time.sleep(1)
+        #     pag.click(550, 720)
+        #     self.fbsvr.firebase('pause', '와이어 미동작')
+        # elif self.idf.referee(self.fbsvr.Wtype.model, "moff") == "moff": # M코드 정지
+        #     self.fbsvr.firebase('moff', 'M코드 정지')
+        # elif self.idf.referee(self.fbsvr.Wtype.model, 'stop') == "stop": # 가동 정지
+        #     self.fbsvr.firebase('off', '가공 정지')
 
 
 # 와이어 솔루션 객체 생성
