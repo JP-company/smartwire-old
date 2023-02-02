@@ -55,52 +55,103 @@ class TimePage extends StatelessWidget {
           return ListView.builder(
               itemCount: docs.length,
               itemBuilder: (context, index){
-                final onoff = docs[index]['onoff'];
+                final onoff = docs[(docs.length - 1) - index]['onoff'];
 
                 dynamic onofftext;
                 dynamic onoffcolor;
                 dynamic onoffstatus;
 
-                if(onoff == 'on'){
+                if(onoff == 'start' || onoff == 'start_restart' || onoff == 'on' || onoff == 'start_restart_detected' || onoff == 'start_autostart'){
                   onofftext = 'ON';
                   onoffcolor = Colors.green;
-                  onoffstatus = '';
-                } else if (onoff == 'off') {
-                  onofftext = 'OFF';
-                  onoffcolor = Colors.red;
-                  onoffstatus = '';
-                } else if (onoff == 'uncut') {
-                  onofftext = 'OFF';
-                  onoffcolor = Colors.red;
-                  onoffstatus = '   와이어 선 씹힘';
-                } else if (onoff == 'nowire') {
-                  onofftext = 'OFF';
-                  onoffcolor = Colors.red;
-                  onoffstatus = '   와이어 선 부족';
-                } else if (onoff == 'contact') {
-                  onofftext = 'OFF';
-                  onoffcolor = Colors.red;
-                  onoffstatus = '   와이어 선 접촉';
-                } else if (onoff == 'pause') {
-                  onofftext = 'OFF';
-                  onoffcolor = Colors.red;
-                  onoffstatus = '   와이어 미동작';
-                } else if (onoff == 'moff') {
-                  onofftext = 'OFF';
-                  onoffcolor = Colors.red;
-                  onoffstatus = '   M코드 정지';
-                } else if (onoff == 'finished') {
+                } else if (onoff == 'stop_finished' || onoff == 'finished') {
                   onofftext = 'FIN';
                   onoffcolor = Colors.blue;
-                  onoffstatus = '   작업 완료';
                 } else if (onoff == 'exit') {
                   onofftext = 'ERR';
                   onoffcolor = Color(0xffD7DF01);
-                  onoffstatus = '   알림 프로그램 꺼짐';
+                } else {
+                  onofftext = 'OFF';
+                  onoffcolor = Colors.red;
                 }
 
+                if(onoff == 'stop' || onoff == 'off'){
+                  onoffstatus = '   가공 정지';
+                } else if(onoff == 'start_restart'){
+                  onoffstatus = '   가공 재시작';
+                } else if(onoff == 'start_restart_detected'){
+                  onoffstatus = '   [가공 감지]가공 재시작';
+                } else if(onoff == 'start_autostart'){
+                  onoffstatus = '   [프로그램]오토스타트';
+                } else if(onoff == 'start'){
+                  onoffstatus = '   작업 시작';
+                } else if(onoff == 'stop_moff'){
+                  onoffstatus = '   M코드 정지';
+                } else if(onoff == 'stop_contact'){
+                  onoffstatus = '   와이어 접촉';
+                } else if(onoff == 'stop_contact_30s'){
+                  onoffstatus = '   와이어 30초 접촉';
+                } else if(onoff == 'stop_cut'){
+                  onoffstatus = '   작업중 와이어 단선';
+                } else if(onoff == 'stop_reset'){
+                  onoffstatus = '   Reset';
+                } else if(onoff == 'stop_wire_notworking'){
+                  onoffstatus = '   와이어 미동작';
+                } else if(onoff == 'stop_liquid_notworking'){
+                  onoffstatus = '   가공액 미동작';
+                } else if(onoff == 'stop_insert_failure'){
+                  onoffstatus = '   자동결선 삽입실패(M20)';
+                } else if(onoff == 'stop_cut_failure'){
+                  onoffstatus = '   자동결선 절단실패(M21)';
+                } else if(onoff == 'stop_cleanup_failure'){
+                  onoffstatus = '   자동결선 잔여와이어 처리실패(M21)';
+                } else if(onoff == 'stop_feed_motor_alarm'){
+                  onoffstatus = '   자동결선 Feed Motor Alarm!!';
+                } else if(onoff == 'stop_auto_cut_failure'){
+                  onoffstatus = '   자동결선 절단 공정 실패';
+                } else if(onoff == 'stop_auto_cleanup_failure'){
+                  onoffstatus = '   자동결선 잔여와이어 처리실패';
+                } else if(onoff == 'stop_lowerpart_contact'){
+                  onoffstatus = '   자동결선 하부 뭉치 Wire Contact!!';
+                } else if(onoff == 'stop_awf_sensor'){
+                  onoffstatus = '   AWF 명령끝날때까지 센서감지 안됨';
+                } else if(onoff == 'stop_single_block_stop'){
+                  onoffstatus = '   작업중 Single Block Stop';
+                } else if(onoff == 'stop_bobbin_wirecut'){
+                  onoffstatus = '   보빈 와이어 단선';
+                } else if(onoff == 'stop_fluid_sensor'){
+                  onoffstatus = '   오일센서 이상 감지';
+                } else if(onoff == 'stop_door_sensor'){
+                  onoffstatus = '   자동문센서 이상 감지';
+                } else if(onoff == 'ready_on'){
+                  onoffstatus = '   Ready On';
+                } else if(onoff == 'ready_off'){
+                  onoffstatus = '   Ready Off';
+                } else if(onoff == 'stop_emergency'){
+                  onoffstatus = '   비상정지';
+                } else if(onoff == 'stop_collect_breakaway'){
+                  onoffstatus = '   회수부 와이어 이탈';
+                } else if(onoff == 'stop_finished' || onoff == 'finished'){
+                  onoffstatus = '   작업 완료';
+                } else if(onoff == 'stop_initialization'){
+                  onoffstatus = '   와이어 기계 연결 완료';
+                } else if(onoff == 'stop_closed'){
+                  onoffstatus = '   와이어 기계 전원 종료됨';
+                } else if(onoff == 'stop_disconnected'){
+                  onoffstatus = '   와이어 기계 연결 끊어짐';
+                } else if(onoff == 'stop_open_succeeded'){
+                  onoffstatus = '   와이어 기계 전원 켜짐';
+                } else if(onoff == 'exit'){
+                  onoffstatus = '   알림 프로그램 오류';
+                } else if(onoff == 'on'){
+                  onoffstatus = '   작업 시작';
+                } else {
+                  onoffstatus = '';
+                }
+
+
                 return ListTile(
-                  title: Text(docs[index]['now'] + onoffstatus,
+                  title: Text(docs[(docs.length - 1) - index]['now'] + onoffstatus,
                     style: TextStyle(
                       fontSize:  18.0,
                     ),),

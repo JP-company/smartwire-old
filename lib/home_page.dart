@@ -250,13 +250,13 @@ class WireCard extends StatelessWidget {
                     }
                   }
 
-                  if(onoff == 'on'){
+                  if(onoff == 'start' || onoff == 'start_restart' || onoff == 'start_restart_detected' || onoff == 'start_autostart'){
                     shadowcolor = Color(0xffD5FADC);
                     bordersidecolor = Color(0xff99FA95);
                     moving_image = 'assets/images/running.gif';
                     status_text_color = Color(0xff40B137);
                     status_time = '시작 시각: ';
-                  } else if(onoff == 'finished'){
+                  } else if(onoff == 'stop_finished'){
                     shadowcolor = Color(0xff2E64FE);
                     bordersidecolor = Color(0xff2E64FE);
                     moving_image = 'assets/images/done.png';
@@ -276,27 +276,77 @@ class WireCard extends StatelessWidget {
                     status_time = '정지 시각: ';
                   }
 
-                  if(onoff == 'uncut'){
-                    status = '와이어 선 씹힘';
-                  } else if(onoff == 'nowire'){
-                    status = '와이어 선 부족';
-                  } else if(onoff == 'contact'){
-                    status = '와이어 선 접촉';
-                  } else if(onoff == 'moff'){
+                  if(onoff == 'stop'){
+                    status = '가공 정지';
+                  } else if(onoff == 'start_restart'){
+                    status = '가공중';
+                  } else if(onoff == 'start_restart_detected'){
+                    status = '가공중';
+                  } else if(onoff == 'start_autostart'){
+                    status = '[프로그램]자동 재실행';
+                  } else if(onoff == 'start'){
+                    status = '작업 시작, 가공중';
+                  } else if(onoff == 'stop_moff'){
                     status = 'M코드 정지';
-                  } else if(onoff == 'finished'){
-                    status = '작업 완료';
-                  } else if(onoff == 'pause'){
+                  } else if(onoff == 'stop_contact'){
+                    status = '와이어 접촉';
+                  } else if(onoff == 'stop_contact_30s'){
+                    status = '와이어 30초 접촉';
+                  } else if(onoff == 'stop_cut'){
+                    status = '작업중 와이어 단선';
+                  } else if(onoff == 'stop_reset'){
+                    status = '리셋';
+                  } else if(onoff == 'stop_wire_notworking'){
                     status = '와이어 미동작';
-                  } else if(onoff == 'nowire'){
-                    status = '와이어 선 부족';
-                  } else if(onoff == 'off'){
-                    status = '가동 정지';
-                  } else if(onoff == 'on'){
-                    status = '가동중';
+                  } else if(onoff == 'stop_liquid_notworking'){
+                    status = '가공액 미동작';
+                  } else if(onoff == 'stop_insert_failure'){
+                    status = '자동결선 삽입실패(M20)';
+                  } else if(onoff == 'stop_cut_failure'){
+                    status = '자동결선 절단실패(M21)';
+                  } else if(onoff == 'stop_cleanup_failure'){
+                    status = '자동결선 잔여와이어 처리실패(M21)';
+                  } else if(onoff == 'stop_feed_motor_alarm'){
+                    status = '자동결선 Feed Motor Alarm!!';
+                  } else if(onoff == 'stop_auto_cut_failure'){
+                    status = '자동결선 절단 공정 실패';
+                  } else if(onoff == 'stop_auto_cleanup_failure'){
+                    status = '자동결선 잔여와이어 처리실패';
+                  } else if(onoff == 'stop_lowerpart_contact'){
+                    status = '자동결선 하부 뭉치 Wire Contact!!';
+                  } else if(onoff == 'stop_awf_sensor'){
+                    status = 'AWF 명령끝날때까지 센서감지 안됨';
+                  } else if(onoff == 'stop_single_block_stop'){
+                    status = '작업중 Single Block Stop';
+                  } else if(onoff == 'stop_bobbin_wirecut'){
+                    status = '보빈 와이어 단선';
+                  } else if(onoff == 'stop_fluid_sensor'){
+                    status = '오일센서 이상 감지';
+                  } else if(onoff == 'stop_door_sensor'){
+                    status = '자동문센서 이상 감지';
+                  } else if(onoff == 'ready_on'){
+                    status = 'Ready On';
+                  } else if(onoff == 'ready_off'){
+                    status = 'Ready Off';
+                  } else if(onoff == 'stop_emergency'){
+                    status = '비상정지';
+                  } else if(onoff == 'stop_collect_breakaway'){
+                    status = '회수부 와이어 이탈';
+                  } else if(onoff == 'stop_finished'){
+                    status = '작업 완료';
+                  } else if(onoff == 'stop_initialization'){
+                    status = '와이어 기계 연결 완료';
+                  } else if(onoff == 'stop_closed'){
+                    status = '와이어 기계 전원 종료됨';
+                  } else if(onoff == 'stop_disconnected'){
+                    status = '와이어 기계 연결 끊어짐';
+                  } else if(onoff == 'stop_open_succeeded'){
+                    status = '와이어 기계 전원 켜짐';
                   } else if(onoff == 'exit'){
-                    status = '알림 프로그램 꺼짐';
+                    status = '알림 프로그램 오류';
                   }
+
+
 
                   return ElevatedButton(
                       onPressed: (){
