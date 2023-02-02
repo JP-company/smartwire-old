@@ -61,7 +61,7 @@ class FirebaseServer:
             return True
 
     def afterwork(self): # 퇴근시간
-        if self.hour > 18 or self.hour < 8:
+        if 20 < self.hour and self.hour < 24:
             return True
 
     def lunch_1(self): # 점심시간
@@ -78,26 +78,28 @@ class FirebaseServer:
         # self.strg.child('{}{}{}'.format('%s'%self.Wtype.file, '/', fileName)).put(fileName)
         
         # 만약에 원격제어중이면
-        # if self.DC.completeFlag:
+        if self.DC.completeFlag:
 
-        # # 남은거리 좌표
-        # areaRemainDistance = (395, 400, 530, 415)
-        # # 재료 T
-        # areaThickness = (94, 338, 134, 357)
-        # # 방전시간
-        # areaRunTime = (460, 430, 500, 455)
+            img = pag.screenshot()
 
-        # # 이미지 자르기
-        # cropRemainDistance = img.crop(areaRemainDistance)
-        # cropThickness = img.crop(areaThickness)
-        # cropRunTime = img.crop(areaRunTime)
+            # 남은거리 좌표
+            areaRemainDistance = (395, 400, 530, 415)
+            # 재료 T
+            areaThickness = (94, 338, 134, 357)
+            # 방전시간
+            areaRunTime = (460, 430, 500, 455)
 
-        # # pytesseract로 이미지 -> 문자열 변환
-        # RemainDistance = pytesseract.image_to_string(cropRemainDistance)
-        # Thickness = pytesseract.image_to_string(cropThickness)
-        # RunTime = pytesseract.image_to_string(cropRunTime)
+            # 이미지 자르기
+            cropRemainDistance = img.crop(areaRemainDistance)
+            cropThickness = img.crop(areaThickness)
+            cropRunTime = img.crop(areaRunTime)
 
-        # self.remote_data(RemainDistance, Thickness, RunTime)
+            # pytesseract로 이미지 -> 문자열 변환
+            RemainDistance = pytesseract.image_to_string(cropRemainDistance)
+            Thickness = pytesseract.image_to_string(cropThickness)
+            RunTime = pytesseract.image_to_string(cropRunTime)
+
+            self.remote_data(RemainDistance, Thickness, RunTime)
 
 
     def firebase(self, data, coment): # 서버 연결
@@ -150,6 +152,7 @@ class FirebaseServer:
             wire_push.set({
                 u'push' : u'%s'%data,
                 u'time' : u'%s %s'%(self.date, self.now),
+                u'wire' : u'%s'%self.Wtype.model
             })
         
         self.screenshot(coment)
@@ -180,7 +183,26 @@ class FirebaseServer:
         })
         self.screenshot('꺼짐')
 
-    def remote_data(self, RemainDistance, Thickness, RunTime): # 원격제어로 재가동한 사례 모음
+    def remote_data(self, point): # 자동 재시작으로 재가동한 사례 모음
+        img = pag.screenshot()
+
+        # 남은거리 좌표
+        areaRemainDistance = (395, 400, 530, 415)
+        # 재료 T
+        areaThickness = (94, 338, 134, 357)
+        # 방전시간
+        areaRunTime = (460, 430, 500, 455)
+
+        # 이미지 자르기
+        cropRemainDistance = img.crop(areaRemainDistance)
+        cropThickness = img.crop(areaThickness)
+        cropRunTime = img.crop(areaRunTime)
+
+        # pytesseract로 이미지 -> 문자열 변환
+        RemainDistance = pytesseract.image_to_string(cropRemainDistance)
+        Thickness = pytesseract.image_to_string(cropThickness)
+        RunTime = pytesseract.image_to_string(cropRunTime)
+
         self.date = time.strftime("%Y-%m-%d")
         self.now = time.strftime("%H:%M:%S")
         wire_push = self.db.collection(u'remote_data').document(u'%s'%self.Wtype.model).collection(u'%s'%self.date).document(u'%s'%self.now)
@@ -188,5 +210,6 @@ class FirebaseServer:
             u'time' : u'%s %s'%(self.date, self.now),
             u'remain_distance' : u'%s'%RemainDistance,
             u'thickness' : u'%s'%Thickness,
-            u'RunTime' : u'%s'%RunTime
+            u'RunTime' : u'%s'%RunTime,
+            u'point' : u'%s'%point
         })
