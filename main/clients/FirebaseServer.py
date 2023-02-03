@@ -29,6 +29,12 @@ class FirebaseServer:
     # 원격제어 데이터 수집기 참조변수
     DC = ""
 
+    # 현재실행중인 NC파일 이름
+    ncFile = ""
+
+    # 현재가공중인 재료T 두께
+    thickness = 0
+
 
     def __init__(self):
         # firebase storage 연결
@@ -78,28 +84,28 @@ class FirebaseServer:
         # self.strg.child('{}{}{}'.format('%s'%self.Wtype.file, '/', fileName)).put(fileName)
         
         # 만약에 원격제어중이면
-        if self.DC.completeFlag:
+        # if self.DC.completeFlag:
 
-            img = pag.screenshot()
+        #     img = pag.screenshot()
 
-            # 남은거리 좌표
-            areaRemainDistance = (395, 400, 530, 415)
-            # 재료 T
-            areaThickness = (94, 338, 134, 357)
-            # 방전시간
-            areaRunTime = (460, 430, 500, 455)
+        #     # 남은거리 좌표
+        #     areaRemainDistance = (395, 400, 530, 415)
+        #     # 재료 T
+        #     areaThickness = (94, 338, 134, 357)
+        #     # 방전시간
+        #     areaRunTime = (460, 430, 500, 455)
 
-            # 이미지 자르기
-            cropRemainDistance = img.crop(areaRemainDistance)
-            cropThickness = img.crop(areaThickness)
-            cropRunTime = img.crop(areaRunTime)
+        #     # 이미지 자르기
+        #     cropRemainDistance = img.crop(areaRemainDistance)
+        #     cropThickness = img.crop(areaThickness)
+        #     cropRunTime = img.crop(areaRunTime)
 
-            # pytesseract로 이미지 -> 문자열 변환
-            RemainDistance = pytesseract.image_to_string(cropRemainDistance)
-            Thickness = pytesseract.image_to_string(cropThickness)
-            RunTime = pytesseract.image_to_string(cropRunTime)
+        #     # pytesseract로 이미지 -> 문자열 변환
+        #     RemainDistance = pytesseract.image_to_string(cropRemainDistance)
+        #     Thickness = pytesseract.image_to_string(cropThickness)
+        #     RunTime = pytesseract.image_to_string(cropRunTime)
 
-            self.remote_data(RemainDistance, Thickness, RunTime)
+        #     self.remote_data(RemainDistance, Thickness, RunTime)
 
 
     def firebase(self, data, coment): # 서버 연결
@@ -137,7 +143,7 @@ class FirebaseServer:
         wire_off = self.db.collection(u'%s'%self.Wtype.model).document(u'dates').collection(u'%s'%self.date).document(u'%s'%self.now)
         wire_off.set({
             u'now': u'%s'%self.now,
-            u'onoff': u'%s'%data
+            u'onoff': u'%s'%data,
         })
 
         # 서버 - 날짜
@@ -146,7 +152,7 @@ class FirebaseServer:
             u'date': u'%s'%self.date,
         })
 
-        # 서버 - 퇴근 시간 이후에만 푸쉬서버에 알림을 보냄
+        # 푸시알림 서버 - 퇴근 시간 이후에만 푸쉬서버에 알림을 보냄
         if self.afterwork():
             wire_push = self.db.collection(u'push_server').document(u'%s'%self.Wtype.model)
             wire_push.set({
@@ -167,7 +173,7 @@ class FirebaseServer:
         wire_off = self.db.collection(u'%s'%self.Wtype.model).document(u'dates').collection(u'%s'%self.date).document(u'%s'%self.now)
         wire_off.set({
             u'now': u'%s'%self.now,
-            u'onoff': u'exit'
+            u'onoff': u'exit',
         })
         wire_off_date = self.db.collection(u'%s'%self.Wtype.model).document(u'%s'%self.date)
         wire_off_date.set({
@@ -188,28 +194,25 @@ class FirebaseServer:
 
         # 남은거리 좌표
         areaRemainDistance = (395, 400, 530, 415)
-        # 재료 T
-        areaThickness = (94, 338, 134, 357)
-        # 방전시간
-        areaRunTime = (460, 430, 500, 455)
 
         # 이미지 자르기
         cropRemainDistance = img.crop(areaRemainDistance)
-        cropThickness = img.crop(areaThickness)
-        cropRunTime = img.crop(areaRunTime)
 
         # pytesseract로 이미지 -> 문자열 변환
         RemainDistance = pytesseract.image_to_string(cropRemainDistance)
-        Thickness = pytesseract.image_to_string(cropThickness)
-        RunTime = pytesseract.image_to_string(cropRunTime)
 
-        self.date = time.strftime("%Y-%m-%d")
-        self.now = time.strftime("%H:%M:%S")
         wire_push = self.db.collection(u'remote_data').document(u'%s'%self.Wtype.model).collection(u'%s'%self.date).document(u'%s'%self.now)
         wire_push.set({
             u'time' : u'%s %s'%(self.date, self.now),
             u'remain_distance' : u'%s'%RemainDistance,
-            u'thickness' : u'%s'%Thickness,
-            u'RunTime' : u'%s'%RunTime,
+            u'thickness' : u'%s'%self.thickness,
             u'point' : u'%s'%point
+        })
+    
+    
+    def currentlyInProgress(self):
+        wire_off = self.db.collection(u'%s'%self.Wtype.model).document(u'currentProgress').collection(u'%s'%self.date).document(u'%s'%self.now)
+        wire_off.set({
+            u'file' : u'%s'%self.ncFile,
+            u'thickness' : u'%s'%self.thickness,
         })

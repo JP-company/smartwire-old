@@ -3,6 +3,7 @@ from firebase_admin import credentials
 import atexit
 import time
 import re
+import math
 import pyautogui as pag
 from clients.Identifier import Identifier
 from clients.FirebaseServer import FirebaseServer
@@ -17,13 +18,14 @@ firebase_admin.initialize_app(cred)
 
 
 class WireSolution:
-  idf = ''
-  fbsvr = ''
-  Wtype = ''
-  DC = ''
+  idf = ""
+  fbsvr = ""
+  Wtype = ""
+  DC = ""
   restart = False
   currentStatus = False
   count = 0
+  resetCount = True
 
   def __init__(self):
     # 가동상태 식별자 객체 생성
@@ -34,6 +36,9 @@ class WireSolution:
 
     # 현재 시간 설정
     self.set_time()
+
+    # 현재 가공 정보 초기화
+    self.fbsvr.currentlyInProgress()
 
   def afterwork(self): # 퇴근시간 후에
     if self.fbsvr.hour > 21 or self.fbsvr.hour < 8:
@@ -80,11 +85,11 @@ class WireSolution:
       index += 1
 
   def autoStart(self):  # 기타 설정
-    if WS.restart:
-      WS.fbsvr.remote_data('가공 완료 후')
-    WS.currentStatus = False
-    WS.restart = False
-    WS.count = 0
+    if self.restart:
+      self.fbsvr.remote_data('가공 완료 후')
+    self.currentStatus = False
+    self.restart = False
+    self.count = 0
 
 # 와이어 솔루션 객체 생성
 WS = WireSolution()
@@ -104,8 +109,8 @@ while True:
   WS.set_time()
 
   # 광명 와이어 로그파일 위치
-  fileWrite = open("C:/spmEzCut/LogMessage/%s.log" %WS.fbsvr.date, "a", encoding='UTF8') # UTF8 ANSI
-  fileRead = open("C:/spmEzCut/LogMessage/%s.log" %WS.fbsvr.date, "r", encoding='UTF8')
+  fileWrite = open("C:/spmEzCut/LogMessage/%s.log" %WS.fbsvr.date, "a", encoding='ANSI') # UTF8 ANSI
+  fileRead = open("C:/spmEzCut/LogMessage/%s.log" %WS.fbsvr.date, "r", encoding='ANSI')
   fileWrite.close()
 
   # 파일 내용 읽어오기
@@ -114,6 +119,8 @@ while True:
 
   # 현재 로그파일 길이 확인
   presentLogLength = len(wire_num)
+  if presentLogLength < previousLogLength:
+    previousLogLength = 0
 
   # 로그파일 변경 감지
   if presentLogLength != previousLogLength and presentLogLength != 0:
@@ -212,6 +219,10 @@ while True:
         WS.fbsvr.firebase('stop_lowerpart_contact', '자동결선 하부 뭉치 WIRE CONTACT')
         WS.autoStart()
         break
+      elif re.search('자동결선 상부 센서 WIRE CONTACT', line):
+        WS.fbsvr.firebase('stop_upperpart_contact', '자동결선 상부 센서 WIRE CONTACT')
+        WS.autoStart()
+        break
       elif re.search('AWF 명령끝날때까지 센서감지', line):
         WS.fbsvr.firebase('stop_awf_sensor', 'AWF 명령끝날때까지 센서감지 안됨')
         WS.autoStart()
@@ -242,10 +253,15 @@ while True:
         break
 
       elif re.search('Reset', line):
+        # 리셋 중복이면 서버에 안올림
+        if WS.resetCount:
+          WS.fbsvr.ncFile = ""
+          WS.fbsvr.thickness = 0
+          WS.fbsvr.currentlyInProgress()
+
         WS.fbsvr.firebase('stop_reset', 'Reset')
-        WS.currentStatus = False
-        WS.restart = False
-        WS.count = 0
+        WS.autoStart()
+        WS.resetCount = False
         break
       elif re.search('작업 끝', line):
         WS.fbsvr.firebase('stop_finished', '작업 완료')
@@ -267,11 +283,18 @@ while True:
         WS.fbsvr.firebase('start_restart', '가공 재시작')
         WS.currentStatus = True
         break
-      elif re.search('작업 시작', line):
+      
+      elif re.search('Z:', line):
+        WS.fbsvr.thickness = math.floor(float(line[line.find("Z:") + 3:].strip()))
+      elif re.search('Nc File:', line):
+        line = line[37:]
+        WS.fbsvr.ncFile = line[line.find('-') + 1 : line.find('.NC') + 3]
+        WS.fbsvr.currentlyInProgress()
         WS.fbsvr.firebase('start', '작업 시작')
         WS.currentStatus = True
         WS.restart = False
         WS.count = 0
+        WS.resetCount = True
         break
 
       elif re.search('Initialization', line):
