@@ -113,6 +113,8 @@ class TimePage extends StatelessWidget {
                   onoffstatus = '   자동결선 잔여와이어 처리실패';
                 } else if(onoff == 'stop_lowerpart_contact'){
                   onoffstatus = '   자동결선 하부 뭉치 Wire Contact!!';
+                } else if(onoff == 'stop_upperpart_contact'){
+                  onoffstatus = '   자동결선 상부 센서 Wire Contact!!';
                 } else if(onoff == 'stop_awf_sensor'){
                   onoffstatus = '   AWF 명령끝날때까지 센서감지 안됨';
                 } else if(onoff == 'stop_single_block_stop'){
