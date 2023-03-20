@@ -20,9 +20,9 @@ class _HomePageState extends State<HomePage> {
   String company = Get.arguments; // 코드를 받아옴
   late final FirebaseMessaging _messaging;
 
+
   void registerNotification() async{
     await Firebase.initializeApp();
-
 
     _messaging = FirebaseMessaging.instance;
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -65,14 +65,8 @@ class _HomePageState extends State<HomePage> {
 
 
   storeNotificationToken() async{
-    String companyCode = '';
-    if (company == 'wire_'){
-      companyCode = 'sit';
-    } else if (company == 'KM_wire_') {
-      companyCode = 'km';
-    }
     String? token = await FirebaseMessaging.instance.getToken();
-    FirebaseFirestore.instance.collection('users').doc('company').collection(companyCode).doc(token).set(
+    FirebaseFirestore.instance.collection('users').doc('company').collection(company).doc(token).set(
         {
           'token': token
         },SetOptions(merge: true));
@@ -106,15 +100,21 @@ class _HomePageState extends State<HomePage> {
 
 
   title() {
-    if (company == 'wire_') {
+    if (company == 'sit') {
       return 'SIT 와이어';
-    } else if (company == 'KM_wire_'){
+    } else if (company == 'km'){
       return '광명와이어';
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    dynamic num1; dynamic num2; dynamic num3; dynamic num4;
+    if (company == "sit") {
+      num1 = "1"; num2 = "2"; num3 = "3"; num4 = "4";
+    } else if (company == "km") {
+      num1 = "2"; num2 = "3"; num3 = "5"; num4 = "6";
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -152,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                     padding: EdgeInsets.fromLTRB(0, 25 , 0, 0),
                     child: WireCard(
                       company: company,
-                      num: '1',
+                      num: num1,
                     )
                 ), // 1번 와이어
 
@@ -160,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                   padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
                   child: WireCard(
                     company: company,
-                    num: '2',
+                    num: num2,
                   )
                 ), // 2번 와이어
 
@@ -168,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                   padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
                   child: WireCard(
                     company: company,
-                    num: '3',
+                    num: num3,
                   )
                 ), // 3번 와이어
 
@@ -176,7 +176,7 @@ class _HomePageState extends State<HomePage> {
                   padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
                   child: WireCard(
                     company: company,
-                    num: '4',
+                    num: num4,
                   ),
                 ), // 4번 와이어
               ],
@@ -196,11 +196,11 @@ class WireCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(company == 'wire_' && (num == '3' || num == '4')){
+    if(company == 'sit' && (num == '3' || num == '4')){
     return Container();
     } else {
       return StreamBuilder(
-          stream: FirebaseFirestore.instance.collection(company + num).snapshots(),
+          stream: FirebaseFirestore.instance.collection("company/" + company + "/" + company + num).snapshots(),
           builder: (BuildContext context,
               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -213,7 +213,7 @@ class WireCard extends StatelessWidget {
             final date = docs_date[last_date]['date'];
 
             return StreamBuilder(
-                stream: FirebaseFirestore.instance.collection(company + num + '/currentProgress/$date').snapshots(),
+                stream: FirebaseFirestore.instance.collection("company/" + company + "/" + company + num + '/FileInfo/$date').snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -225,7 +225,7 @@ class WireCard extends StatelessWidget {
                   final file_name = docs_file[docs_file.length - 1]['file'];
 
                   return StreamBuilder(
-                      stream: FirebaseFirestore.instance.collection(company + num + '/dates/$date').snapshots(),
+                      stream: FirebaseFirestore.instance.collection("company/" + company + "/" + company + num + '/Logs/$date').snapshots(),
                       builder: (BuildContext context,
                           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot){
                         if(snapshot.connectionState == ConnectionState.waiting){
@@ -236,8 +236,8 @@ class WireCard extends StatelessWidget {
 
                         final docs = snapshot.data!.docs;
                         final last_sts = docs.length - 1;
-                        final onoff = docs[last_sts]['onoff'];
-                        final now = docs[last_sts]['now'];
+                        final onoff = docs[last_sts]['log'];
+                        final now = docs[last_sts]['time'];
 
                         dynamic wirename;
                         dynamic status;
@@ -249,7 +249,7 @@ class WireCard extends StatelessWidget {
 
 
 
-                        if(company == 'wire_'){
+                        if(company == 'sit'){
                           if(num == '1'){
                             wirename = '1호기  ';
                           } else if(num == '2'){
@@ -260,14 +260,14 @@ class WireCard extends StatelessWidget {
                             wirename = '4호기  ';
                           }
                         }
-                        else if(company == 'KM_wire_'){
-                          if(num == '1'){
+                        else if(company == 'km'){
+                          if(num == '2'){
                             wirename = '2호기  ';
-                          } else if(num == '2'){
-                            wirename = '3호기  ';
                           } else if(num == '3'){
+                            wirename = '3호기  ';
+                          } else if(num == '5'){
                             wirename = '5호기  ';
-                          } else if(num == '4'){
+                          } else if(num == '6'){
                             wirename = '6호기  ';
                           }
                         }
@@ -374,25 +374,25 @@ class WireCard extends StatelessWidget {
 
                         return ElevatedButton(
                             onPressed: (){
-                              if(company == 'wire_'){
+                              if(company == 'sit'){
                                 Future.delayed(Duration.zero, (){
                                   if(num == '1'){
-                                    Get.toNamed("/home/date_page", arguments: 'wire_1');
+                                    Get.toNamed("/home/date_page", arguments: 'sit1');
                                   } else if(num == '2'){
-                                    Get.toNamed("/home/date_page", arguments: 'wire_2');
+                                    Get.toNamed("/home/date_page", arguments: 'sit2');
                                   }
                                 });
                               }
-                              else if(company == 'KM_wire_'){
+                              else if(company == 'km'){
                                 Future.delayed(Duration.zero, () {
-                                  if(num == '1'){
-                                    Get.toNamed("/home/date_page", arguments: 'KM_wire_1');
-                                  } else if(num == '2'){
-                                    Get.toNamed("/home/date_page", arguments: 'KM_wire_2');
+                                  if(num == '2'){
+                                    Get.toNamed("/home/date_page", arguments: 'km2');
                                   } else if(num == '3'){
-                                    Get.toNamed("/home/date_page", arguments: 'KM_wire_3');
-                                  } else if(num == '4'){
-                                    Get.toNamed("/home/date_page", arguments: 'KM_wire_4');
+                                    Get.toNamed("/home/date_page", arguments: 'km3');
+                                  } else if(num == '5'){
+                                    Get.toNamed("/home/date_page", arguments: 'km5');
+                                  } else if(num == '6'){
+                                    Get.toNamed("/home/date_page", arguments: 'km6');
                                   }
                                 });
                               }

@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
           onPressed: () async {
             if (controller.text == 'sit') {
               Future.delayed(Duration.zero, () {
-                Get.toNamed("/home", arguments: 'wire_');
+                Get.toNamed("/home", arguments: 'sit');
               });
               await DatabaseHelper.instance.add(
                 Code(name: controller.text),
@@ -60,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
               });
             } else if (controller.text == 'gm') {
               Future.delayed(Duration.zero, () {
-                Get.toNamed("/home", arguments: 'KM_wire_');
+                Get.toNamed("/home", arguments: 'km');
               });
               await DatabaseHelper.instance.add(
                 Code(name: controller.text),
@@ -91,11 +91,11 @@ class _LoginPageState extends State<LoginPage> {
                       children: snapshot.data!.map((code) {
                         if (code.name == 'sit') {
                           Future.delayed(Duration.zero, () {
-                            Get.toNamed("/home", arguments: 'wire_');
+                            Get.toNamed("/home", arguments: 'sit');
                           });
                         } else if (code.name == 'gm') {
                           Future.delayed(Duration.zero, () {
-                            Get.toNamed("/home", arguments: 'KM_wire_');
+                            Get.toNamed("/home", arguments: 'km');
                           });
                         }
                         return Center(

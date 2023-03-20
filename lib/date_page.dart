@@ -7,22 +7,22 @@ class DatePage extends StatelessWidget {
 
   String company = Get.arguments; // 코드를 받아옴
   dynamic title;
-
+  dynamic path;
 
   @override
   Widget build(BuildContext context) {
-    if(company == "wire_1"){
-      title = '1번 와이어 가동 기록';
-    } else if(company == "wire_2"){
-      title = '2번 와이어 가동 기록';
-    } else if(company == "KM_wire_1"){
-      title = '2호기 가동 기록';
-    } else if(company == "KM_wire_2"){
-      title = '3호기 가동 기록';
-    } else if(company == "KM_wire_3"){
-      title = '5호기 가동 기록';
-    } else if(company == "KM_wire_4"){
-      title = '6호기 가동 기록';
+    if(company == "sit1"){
+      title = '1호기 가동 기록'; path = "sit";
+    } else if(company == "sit2"){
+      title = '2호기 가동 기록'; path = "sit";
+    } else if(company == "km2"){
+      title = '2호기 가동 기록'; path = "km";
+    } else if(company == "km3"){
+      title = '3호기 가동 기록'; path = "km";
+    } else if(company == "km5"){
+      title = '5호기 가동 기록'; path = "km";
+    } else if(company == "km6"){
+      title = '6호기 가동 기록'; path = "km";
     }
     return Scaffold(
       appBar: AppBar(
@@ -42,7 +42,7 @@ class DatePage extends StatelessWidget {
       ),
       body:
       StreamBuilder(
-        stream: FirebaseFirestore.instance.collection(company).snapshots(),
+        stream: FirebaseFirestore.instance.collection("company/" + path + "/" + company).snapshots(),
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

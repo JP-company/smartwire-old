@@ -13,18 +13,20 @@ class TimePage extends StatelessWidget {
     String date = Get.arguments['date'];
     String wire = Get.arguments['wire'];
     dynamic title;
-    if(wire == "wire_1"){
-      title = '1번 와이어';
-    } else if(wire == "wire_2"){
-      title = '2번 와이어';
-    } else if(wire == "KM_wire_1"){
-      title = '2호기';
-    } else if(wire == "KM_wire_2"){
-      title = '3호기';
-    } else if(wire == "KM_wire_3"){
-      title = '5호기';
-    } else if(wire == "KM_wire_4"){
-      title = '6호기';
+    dynamic path;
+
+    if(wire == "sit1"){
+      title = '1호기'; path = "sit";
+    } else if(wire == "sit2"){
+      title = '2호기'; path = "sit";
+    } else if(wire == "km2"){
+      title = '2호기'; path = "km";
+    } else if(wire == "km3"){
+      title = '3호기'; path = "km";
+    } else if(wire == "km5"){
+      title = '5호기'; path = "km";
+    } else if(wire == "km6"){
+      title = '6호기'; path = "km";
     }
 
     return Scaffold(
@@ -43,7 +45,7 @@ class TimePage extends StatelessWidget {
         backgroundColor: Colors.white,
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection(wire + '/dates/$date').snapshots(),
+        stream: FirebaseFirestore.instance.collection("company/" + path + "/" + wire + '/Logs/$date').snapshots(),
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if(snapshot.connectionState == ConnectionState.waiting){
@@ -55,7 +57,7 @@ class TimePage extends StatelessWidget {
           return ListView.builder(
               itemCount: docs.length,
               itemBuilder: (context, index){
-                final onoff = docs[(docs.length - 1) - index]['onoff'];
+                final onoff = docs[(docs.length - 1) - index]['log'];
 
                 dynamic onofftext;
                 dynamic onoffcolor;
@@ -153,7 +155,7 @@ class TimePage extends StatelessWidget {
 
 
                 return ListTile(
-                  title: Text(docs[(docs.length - 1) - index]['now'] + onoffstatus,
+                  title: Text(docs[(docs.length - 1) - index]['time'] + onoffstatus,
                     style: TextStyle(
                       fontSize:  18.0,
                     ),),
