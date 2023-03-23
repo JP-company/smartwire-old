@@ -122,13 +122,13 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold),), // 회사 이름
-        leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-          color: Colors.black,
-          icon: Icon(Icons.arrow_back_ios),
-        ),
+        // leading: IconButton(
+        //   onPressed: () {
+        //     Get.back();
+        //   },
+        //   color: Colors.black,
+        //   icon: Icon(Icons.arrow_back_ios),
+        // ),
         centerTitle: false,
         elevation: 0.5,
         backgroundColor: Colors.white,
@@ -210,10 +210,14 @@ class WireCard extends StatelessWidget {
             } //렉 방지
             final docs_date = snapshot.data!.docs;
             final last_date = docs_date.length - 1;
-            final date = docs_date[last_date]['date'];
+            dynamic date = docs_date[last_date]['date'];
+
+            dynamic dateArr = date.split(" ");
+            dynamic dateArrLast = dateArr[dateArr.length - 1];
+
 
             return StreamBuilder(
-                stream: FirebaseFirestore.instance.collection("company/" + company + "/" + company + num + '/FileInfo/$date').snapshots(),
+                stream: FirebaseFirestore.instance.collection("company/" + company + "/" + company + num + '/FileInfo/$dateArrLast').snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -225,7 +229,7 @@ class WireCard extends StatelessWidget {
                   final file_name = docs_file[docs_file.length - 1]['file'];
 
                   return StreamBuilder(
-                      stream: FirebaseFirestore.instance.collection("company/" + company + "/" + company + num + '/Logs/$date').snapshots(),
+                      stream: FirebaseFirestore.instance.collection("company/" + company + "/" + company + num + '/Logs/$dateArrLast').snapshots(),
                       builder: (BuildContext context,
                           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot){
                         if(snapshot.connectionState == ConnectionState.waiting){
@@ -440,7 +444,7 @@ class WireCard extends StatelessWidget {
                                       ),
                                     ), // 가동중
                                     Container(
-                                      child: Text(status_time + '$date $now',
+                                      child: Text(status_time + '$dateArrLast $now',
                                         style:
                                         TextStyle(
                                             color:Color(0xff9E9E9E),

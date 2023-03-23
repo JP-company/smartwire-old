@@ -14,7 +14,7 @@ Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("백그라운드 메세지: ${message.messageId}");
 }
 
-Future<void> backgroundHandler(RemoteMessage message) async{
+Future<void> backgroundHandler(RemoteMessage message) async {
   print(message.data.toString());
   print(message.notification!.title);
 }
@@ -28,7 +28,6 @@ void main() async{
 
 class MyApp extends StatelessWidget {
 
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -37,6 +36,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+
+
       initialRoute: "/",
       getPages: [
         GetPage(name: "/", page: () => LoginPage()),

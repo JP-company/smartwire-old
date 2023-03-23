@@ -51,19 +51,22 @@ class DatePage extends StatelessWidget {
             );}
 
           final docs = snapshot.data!.docs;
+          dynamic dateArr = docs[docs.length -1]['date'].split(" ");
+
+
           return ListView.builder(
-              itemCount: docs.length,
+              itemCount: dateArr.length,
               itemBuilder: (context, index) {
                 return ListTile(
                   onTap: () {
                     Future.delayed(Duration.zero, () {
                       Get.toNamed("/home/date_page/time_page",
-                          arguments: {'date' : docs[(docs.length - 1) - index]['date'], 'wire' : company}
+                          arguments: {'date' : dateArr[(dateArr.length - 1) - index], 'wire' : company}
                       );
                     });//wire_1 문서(docs)에 'index'번쨰의 date 값
                   },
                   title: Text(
-                    docs[(docs.length - 1) - index]['date'],
+                    dateArr[(dateArr.length - 1) - index],
                     style: TextStyle(
                         fontSize: 20.0
                     ),
