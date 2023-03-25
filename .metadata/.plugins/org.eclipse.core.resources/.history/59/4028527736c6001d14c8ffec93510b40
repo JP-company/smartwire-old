@@ -1,0 +1,16 @@
+package data;
+
+import java.io.IOException;
+import java.util.HashMap;
+
+public class LogData {
+
+	public static void main(String[] args) throws IOException {
+		HashMap<String, Object> map = new HashMap();
+		map.put("Wire Contact Auto Stop", new LogUpload());
+		map.put("nickname", "June Kim");
+		
+
+	}
+
+}

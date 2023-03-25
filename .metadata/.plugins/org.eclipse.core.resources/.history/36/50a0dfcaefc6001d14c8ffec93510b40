@@ -1,0 +1,41 @@
+package firebase;
+
+import java.net.ConnectException;
+import java.net.UnknownHostException;
+
+import data.LogData;
+import file.WireID;
+import timeFunctions.CurrentTime;
+
+public class FirebaseUpload {
+	
+	
+	public static void pushAlarmUpload() {
+		
+	}
+	
+	public static void logUpload(String logKey) {
+			
+			String path = null;
+			String pathLog = null;
+			
+			if (WireID.getWireID().contains("km")) { path = "company/km/"; } 
+			else if (WireID.getWireID().contains("sit")) { path = "company/sit/"; }
+			
+			pathLog = path + WireID.getWireID() + "/Logs/" + CurrentTime.getTime("date") + "/" + CurrentTime.getTime("time");
+			
+			try {
+				FirebaseUploadForm.uploadForm(pathLog, "log", LogData.getLogMap().get(logKey)[0], "time", CurrentTime.getTime("time"));
+				FirebaseUploadForm.uploadForm(path + WireID.getWireID() + "/Logs", "date", CurrentTime.getTime("date"));
+				
+				
+				System.out.println(CurrentTime.getTime("date") + " " + CurrentTime.getTime("time") + " " + LogData.getLogMap().get(logKey)[1]);
+				
+			} catch (UnknownHostException uke) {
+				System.out.println(CurrentTime.getTime("date") + " " + CurrentTime.getTime("time") + " " + "인터넷 연결이 불안정합니다.");
+			} catch (ConnectException ce) {
+				System.out.println(CurrentTime.getTime("date") + " " + CurrentTime.getTime("time") + " " + ce.getMessage());
+			} catch (Exception e) { e.printStackTrace(); }
+			
+		}
+}

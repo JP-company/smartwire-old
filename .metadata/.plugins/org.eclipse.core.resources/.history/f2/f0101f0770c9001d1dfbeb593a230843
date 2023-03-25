@@ -1,0 +1,21 @@
+package test;
+
+import java.util.LinkedList;
+import java.util.ListIterator;
+
+public class Test {
+
+	public static void main(String[] args) {
+		String str = "";
+		LinkedList<String> tmp = (LinkedList<String>)dateData;
+		ListIterator<String> it = tmp.listIterator();
+		
+		while(it.hasNext()){
+			str = str +it.next() + " ";
+		}
+		
+		System.out.println(str.trim(););
+
+	}
+
+}

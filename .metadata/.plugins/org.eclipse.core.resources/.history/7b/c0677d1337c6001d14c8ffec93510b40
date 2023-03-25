@@ -1,0 +1,12 @@
+package data;
+
+import java.io.IOException;
+import firebase.FirebaseUpload;
+
+public class LogUpload {
+	
+	LogUpload() throws IOException{
+		FirebaseUpload.dataUpload("test/hi", "hello", "hello2");
+	}
+
+}

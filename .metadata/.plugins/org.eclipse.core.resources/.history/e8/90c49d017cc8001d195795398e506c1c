@@ -1,0 +1,29 @@
+package screenShots;
+
+import java.awt.AWTException;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+public class Screenshots {
+    public static void main(String[] args) {
+        try {
+            // 화면 크기 구하기
+            Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+            // 로봇 객체 생성
+            Robot robot = new Robot();
+            // 스크린샷 찍기
+            BufferedImage image = robot.createScreenCapture(screenRect);
+            // 이미지 파일로 저장
+            File file = new File("screenshots/screenshot.png");
+            ImageIO.write(image, "png", file);
+        } catch (AWTException | IOException ex) {
+            System.err.println(ex);
+        }
+    }
+}

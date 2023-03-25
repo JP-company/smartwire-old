@@ -1,0 +1,13 @@
+package functions;
+
+public class TimeSleep { // 시간 지연 메서드 TimeSleep.sleep()
+
+	public static void sleep(float sec) {
+        try {
+            Thread.sleep((int)(1000 * sec));
+        } catch (InterruptedException e) {
+            e.printStackTrace(); 
+        }
+	}
+	
+}

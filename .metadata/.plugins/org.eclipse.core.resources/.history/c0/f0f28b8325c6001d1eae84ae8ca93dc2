@@ -1,0 +1,69 @@
+package file;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import functions.CurrentTime;
+
+// Characters 변수 
+// wireID : 와이어 기계를 식별하는 값이다. ex) sit1
+
+// Operations 기능
+
+// 
+// precondition:
+// postcondition:
+// return:
+
+public class WireID {
+	private final String wireID;
+	
+	public static void main(String[] args) {
+		
+	}
+	
+	public static void checkLogFile() throws IOException {  // 로그파일을 확인해서 이전 로그 파일 길이, 현재 로그파일 길이, 변경된 로그파일 길이를 저장한다.
+			
+			// 파일 위치, 이름
+			String filePath = String.format("./setting/wireID.txt");
+			
+			try {
+				ArrayList<String> fileReaded = new ArrayList<>();
+		    	
+				// 로그 파일 불러오기, 한줄씩 저장
+		    	BufferedReader reader = new BufferedReader(new FileReader(filePath));
+		    	String str;
+		    	while ((str = reader.readLine()) != null) {
+		    		fileReaded.add(str);
+		    	}
+		    	
+		    	// 배열로 변환
+		    	WireID.logFileArr = new String[0];
+		    	LogFile.logFileArr = fileReaded.toArray(LogFile.logFileArr);
+		    	
+		    	// 이전 로그 파일 길이에 현재 로그 파일 길이 저장
+		    	LogFile.previousLogLength = LogFile.currentLogLength;
+		    	
+		    	// 현재 로그 파일 길이 저장
+		    	LogFile.currentLogLength = LogFile.logFileArr.length;
+		    	if (LogFile.logFileArr[0] == null) {
+		    		LogFile.currentLogLength = 0;
+		    	}
+		    	
+		    	// 추가된 로그 파일 길이 저장
+		    	LogFile.addedLogLength = LogFile.currentLogLength - LogFile.previousLogLength;
+		    	
+		    	reader.close();
+		    	
+			} catch (FileNotFoundException fe) {  // 파일 없으면 파일 생성
+				File file = new File(filePath);
+				file.createNewFile();
+			} catch (ArrayIndexOutOfBoundsException ae) { }
+				
+		}
+
+}
+

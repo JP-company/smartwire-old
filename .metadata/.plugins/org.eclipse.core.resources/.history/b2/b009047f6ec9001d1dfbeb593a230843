@@ -1,0 +1,80 @@
+package data;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.ListIterator;
+import java.util.Queue;
+
+import file.FileCreater;
+
+//import timeFunctions.CurrentTime;
+
+public class DateQueue {
+
+	private static Queue<String> dateData = new LinkedList<String>();
+	private static final int MAX_SIZE = 30;
+	private static final String DIRECTORY = "setting";
+	private static final String FILE = "DateQueue.txt";
+	
+	static {
+		// 파일 위치, 이름
+		String filePath = System.getProperty("user.dir")
+				+ File.separator	// Windows('\'), Linux, MAC('/')
+				+ DIRECTORY;
+		File fileDir = new File(filePath);
+		File file = new File(filePath, FILE);  // 파일 이름
+		
+		if (!file.exists()) {
+			try { 
+				fileDir.mkdir();  // 디렉토리 생성
+				file.createNewFile();  // 파일 생성 
+			} 
+			catch (IOException e) { e.printStackTrace(); } 
+		}
+		FileCreater.createFile(DIRECTORY, PATH);
+
+
+		
+		
+	}
+	
+//	public static void main(String[] args) {
+//		CurrentTime.setTime();
+//		
+////		saveDate("1");
+////		saveDate("2");
+//		saveDate(CurrentTime.getTime("date"));
+//		saveDate(CurrentTime.getTime("date"));
+//		saveDate(CurrentTime.getTime("date"));
+//		saveDate("2023-03-23");
+//		saveDate("2023-03-23");
+//		saveDate("2023-03-24");
+//		saveDate("2023-03-25");
+//
+//		
+//		System.out.println(DateQueue.getDateData());
+//	}
+
+	public static void saveDate(String date) {
+		if (dateData.peek() == null || !getDateData().contains(date)) { dateData.offer(date); }
+		
+		if (dateData.size() > MAX_SIZE) { dateData.remove(); }
+		
+	} 
+	
+	public static String getDateData() {
+		String str = "";
+		LinkedList<String> tmp = (LinkedList<String>)dateData;
+		ListIterator<String> it = tmp.listIterator();
+		
+		while(it.hasNext()){
+			str = str +it.next() + " ";
+		}
+		return str.trim();
+	}
+	
+}

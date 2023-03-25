@@ -1,0 +1,29 @@
+package data;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+
+public class LogData {
+	
+	static HashMap<String, String[]> map = new HashMap<String, String[]>();
+
+	public static void main(String[] args) throws IOException {
+		
+    	String[] logKey = {"Wire Contact Auto Stop", "M코드 정지"};
+    	String[][] logValue = {{"stop_contact", "와이어 접촉"}, {"stop_moff", "M코드 정지"}};
+    	for (int i = 0; i < logKey.length; i++) {
+    		map.put(logKey[i], logValue[i]);
+    	}
+		
+		Set<String> set = map.keySet();
+		Iterator<String> it = set.iterator();
+		ArrayList<String> arrList = new ArrayList<String>(set.size());
+		
+		while(it.hasNext()){
+			arrList.add(it.next());
+		}
+	}
+}

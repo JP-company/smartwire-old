@@ -1,0 +1,19 @@
+package data;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Set;
+
+public class LogData {
+
+	public static void main(String[] args) throws IOException {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("Wire Contact Auto Stop", "hi");
+		map.put("M코드 정지", new LogUpload("stop_moff","M코드 정지"));
+		
+//		Set set = map.entrySet();
+//		set = map.entrySet();
+//		System.out.println(set);
+	}
+
+}

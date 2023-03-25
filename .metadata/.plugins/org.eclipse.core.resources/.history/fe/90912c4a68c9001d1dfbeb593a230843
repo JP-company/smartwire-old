@@ -1,0 +1,16 @@
+package test;
+
+public class Test {
+
+	public static void main(String[] args) {
+		String[] addedLines = null;
+		
+		if (addedLines.length == 0) {
+			System.out.println("하이");
+		} else {
+			System.out.println("바이");
+		}
+
+	}
+
+}
