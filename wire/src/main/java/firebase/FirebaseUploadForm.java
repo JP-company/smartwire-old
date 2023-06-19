@@ -165,4 +165,50 @@ public class FirebaseUploadForm {
 	}
 	
 	
+	
+public static void uploadForm(String location, String key_1, String value_1, String key_2, String value_2, String key_3, String value_3, String key_4, String value_4, String key_5, String value_5) throws ConnectException, IOException {
+		
+		OkHttpClient client = new OkHttpClient();
+        
+        MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(mediaType, 
+        				"{\n" +
+                        "  \"fields\": {\n" +
+                        
+                        "    \"" + key_1 + "\": {\n " +
+                        "      \"stringValue\": \"" + value_1 + "\" \n " +
+                        "    },\n " +
+                        
+						"    \"" + key_2 + "\": {\n " +
+						"      \"stringValue\": \"" + value_2 + "\" \n " +
+						"    },\n " +
+						
+		                "    \"" + key_3 + "\": {\n " +
+		                "      \"stringValue\": \"" + value_3 + "\" \n " +
+		                "    },\n " +
+		                
+		                "    \"" + key_4 + "\": {\n " +
+		                "      \"stringValue\": \"" + value_4 + "\" \n " +
+		                "    },\n " +
+		                
+						"    \"" + key_5 + "\": {\n " +
+						"      \"stringValue\": \"" + value_5 + "\" \n " +
+						"    },\n " +
+                        
+                        "  }\n" +
+                        "}"
+        		);
+
+        Request request = new Request.Builder()
+                .url(firbaseURL + location)
+                .patch(body) // post, patch
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+        	if(response.code() == 403) {
+        		throw new ConnectException("서버 접근 권한 없음");
+        	}
+        }
+	}
+	
 }

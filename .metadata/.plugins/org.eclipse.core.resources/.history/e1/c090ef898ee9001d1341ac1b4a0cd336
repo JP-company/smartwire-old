@@ -1,0 +1,97 @@
+package sit.wire;
+
+
+// Characters 변수 
+
+// Operations 기능
+
+// 
+// precondition:
+// postcondition:
+// return:
+
+import java.io.IOException;
+
+import autoStart.AutoStart;
+import data.LogData;
+import data.ManagingStatus;
+import file.LogFile;
+import firebase.FirebaseUpload;
+import screenshots.ScreenDetection;
+import timeFunctions.ActualProcessingTime;
+import timeFunctions.CurrentTime;
+import timeFunctions.TimeSleep;
+
+
+public class Main {
+	
+	private static boolean readFirstLog = false;
+	private static boolean search = false; 
+	private static boolean reseted = false; 
+
+    public static void main(String[] args) {
+    	
+    	System.out.println("--------------와이어 알림 프로그램 시작--------------");
+    	
+    	try {
+	    	while (true) {
+	    		CurrentTime.setTime(); // 현재 시간 설정
+	    		String[] addedLines = LogFile.addedLines();  // 추가된 로그
+	    		readFirstLog = false;
+	    		search = false;
+	    		
+	    		if (addedLines != null) {
+	    			for (String line : addedLines) {  // 추가된 로그 탐색
+	    				
+	    				// 시작 여부 확인
+	    				if (!search && line.contains("Nc File:")) { 
+	    					FirebaseUpload.fileInfoUpload(line);
+	    					search = true;
+	    					reseted = false;
+	    				
+	    				// reset여부 확인
+	    				} else if (!search && !reseted && line.contains("Reset")) { 
+	    					FirebaseUpload.fileInfoUpload(line);
+	    					search = true;
+	    					reseted = true;
+	    					
+	    				} else if (!search && line.contains("Z:")) {  }
+	    				
+	    				
+	    				for (String logKey : LogData.getLogKeyList()) {  // 추가된 로그에 특정 key포함되어있는지 확인
+	    					if (!readFirstLog && line.contains(logKey)) {
+	    						
+	    						// 가공 정보 서버 업로드
+	    						FirebaseUpload.logUpload(logKey);
+	    						
+	    						// 실제 가공 시간 측정
+	    						ActualProcessingTime.calculateTime(logKey);
+	    						
+	    						
+	    						// 자동 재실행 프로그램
+	    						AutoStart.verifyLog(logKey);
+	    						
+	    						readFirstLog = true;
+	    					}
+	    				}
+	    				
+	    				
+	    				
+	    			}
+	    		}
+	    		
+	    		
+	    		if (!ManagingStatus.getProcessingStatus() && ScreenDetection.Restart()) {
+	    			FirebaseUpload.logUpload("가공감지");
+	    		}
+	    		
+	    		
+	        	TimeSleep.sleep(1);  // 시간 지연
+	        	
+	    	}
+	    	
+    	} catch (IOException e) { e.printStackTrace(); }
+    	catch (Exception e) { e.printStackTrace(); }
+    	
+    }
+}

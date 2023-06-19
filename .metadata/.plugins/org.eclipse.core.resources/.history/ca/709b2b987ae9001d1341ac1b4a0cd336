@@ -1,0 +1,101 @@
+package timeFunctions;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+
+// Operations 기능
+
+// void setTime()
+// precondition: 없음
+// postcondition: 
+// 			1. currentDate 변수에 23-01-01 형식으로 현재날짜를 저장한다. 서버에 올릴 용도이다.
+//			2. currentTime 변수에 08:00:00 형식으로 현재시간을 저장한다. 서버에 올릴 용도이다.
+//			3. currentHour 변수에 00 ~ 23 형식으로 현재시간의 시간을 저장한다.
+//			4. currentMin 변수에 00 ~ 59 형식으로 현재 시간의 분을 저장한다.
+//			5. currentDateForFile 변수에 230101 형식으로 현재 날짜를 저장한다. 스크린샷 파일이름으로 쓰는 용도이다.
+//			6. currentTimeForFile 변수에 080000 형식으로 현재 시간을 저장한다. 스크린샷 파일이름으로 쓰는 용도이다.
+// return: none
+
+// String getTime(String type)
+// precondition: 이 메서드를 호출하기전에 무조건 setTime() 메서드를 호출해서 현재 시간을 업데이트해야 한다.
+//				  또한 
+// postcondition: 없음
+// return: 입력받은 매개 변수 type에 따라 현재 시간에 대한 정보를 반환한다.
+//			1. "date" => currentDate 현재 날짜
+//			2. "time" => currentTime 현재 시간
+//			3. "hour" => currentHour 현재 시간(시)
+//			4. "min" => currentMin 현재 시간(분)
+//			5. "dateForFile" => currentDateForFile 현재날짜(파일용)
+//			6. "timeForFile" => currentTimeForFile 현재시간(파일용)
+
+public class CurrentTime {
+	
+	private static long realTime = 0;
+	private static String currentDate = "";
+	private static String currentTime = "";
+	private static String currentHour;
+	private static String currentMin;
+	private static String currentDateForFile = "";
+	private static String currentTimeForFile = "";
+	
+	// 이 메서드를 호출하면 현재 시간을 맴버 변수에 저장
+	public static void setTime() {
+		LocalDate date = LocalDate.now();
+		
+		// 현재 날짜
+		CurrentTime.currentDate = date.toString();
+		
+		// 현재 날짜 (이미지 파일용)
+		String[] dateForFile = CurrentTime.currentDate.split("-");
+		dateForFile[0] = dateForFile[0].substring(2, 4);
+		CurrentTime.currentDateForFile = String.join("", dateForFile);
+		
+		LocalTime time = LocalTime.now();
+		
+		String hour = String.valueOf(time.getHour());
+		String min = String.valueOf(time.getMinute());
+		String sec = String.valueOf(time.getSecond());
+		
+		if (Integer.valueOf(hour) < 10) { hour = "0" + hour; }
+		if (Integer.valueOf(min) < 10) { min = "0" + min; }
+		if (Integer.valueOf(sec) < 10) { sec = "0" + sec; }
+		
+		// 현재 시간
+		CurrentTime.currentTime = hour + ":" + min + ":" + sec;
+		
+		// 현재 시, 분
+		CurrentTime.currentHour = hour;
+		CurrentTime.currentMin = min;
+		
+		// 현재 시간 (이미지 파일용)
+		CurrentTime.currentTimeForFile = hour + min + sec;
+		
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+	}
+	
+	
+	// 맴버 변수 가져오는 메서드
+	public static String getTime(String type) {
+		switch(type) {
+			case "date":
+				return CurrentTime.currentDate;
+			case "time":
+				return CurrentTime.currentTime;
+			case "dateFF":
+				return CurrentTime.currentDateForFile;
+			case "timeFF":
+				return CurrentTime.currentTimeForFile;
+			case "hour":
+				return CurrentTime.currentHour;
+			case "min":
+				return CurrentTime.currentMin;
+			default:
+				return "";  // 여기에 에러를 만들어서 넘길까? 230316
+		}
+	}
+}

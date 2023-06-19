@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;test.Test&apos; to &apos;FileWrite&apos;&#x0D;&#x0A;- Original project: &apos;wire&apos;&#x0D;&#x0A;- Original element: &apos;test.Test&apos;&#x0D;&#x0A;- Renamed element: &apos;test.FileWrite&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;Test&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src\/main\/java&lt;test{Test.java[Test" matchStrategy="1" name="FileWrite" qualified="false" references="true" similarDeclarations="false" stamp="1682422259834" textual="false" version="1.0"/>
+</session>

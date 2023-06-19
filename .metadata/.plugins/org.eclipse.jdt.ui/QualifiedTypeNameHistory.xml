@@ -31,10 +31,14 @@
 <fullyQualifiedTypeName name="java.net.ConnectException"/>
 <fullyQualifiedTypeName name="file.WireID"/>
 <fullyQualifiedTypeName name="screenShots.ScreenDetection"/>
-<fullyQualifiedTypeName name="firebase.FirebaseUpload"/>
 <fullyQualifiedTypeName name="java.util.ListIterator"/>
 <fullyQualifiedTypeName name="data.DateQueue"/>
-<fullyQualifiedTypeName name="timeFunctions.CurrentTime"/>
 <fullyQualifiedTypeName name="screenShots.Screenshots"/>
 <fullyQualifiedTypeName name="file.FileCreater"/>
+<fullyQualifiedTypeName name="timeFunctions.TimeSleep"/>
+<fullyQualifiedTypeName name="firebase.FirebaseUpload"/>
+<fullyQualifiedTypeName name="autoStart.AutoStart"/>
+<fullyQualifiedTypeName name="timeFunctions.TimeZone"/>
+<fullyQualifiedTypeName name="timeFunctions.ProcessingTime"/>
+<fullyQualifiedTypeName name="timeFunctions.CurrentTime"/>
 </qualifiedTypeNameHistroy>

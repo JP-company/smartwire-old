@@ -91,7 +91,6 @@ public class LogFile {
 	    	
 	    	// 현재 로그 파일 길이 저장
 	    	LogFile.currentLogLength = LogFile.logFileArr.length;
-//	    	if (LogFile.logFileArr[0] == null) { LogFile.currentLogLength = 0; }
 	    	
 	    	// 추가된 로그 파일 길이 저장
 	    	LogFile.addedLogLength = LogFile.currentLogLength - LogFile.previousLogLength;

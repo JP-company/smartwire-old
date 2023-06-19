@@ -26,28 +26,33 @@ public class ScreenDetection {
 		        File file = new File(filePath);
 		        ImageIO.write(capture, "png", file);
 		        
-		        
 		        // 이미지 불러옴
 		        BufferedImage image = ImageIO.read(file);
 		        
 		        // 색 검출 좌표 설정
 		        int[] x = {765, 710, 665, 610};
+		        
 		        int y = -1;
 		        if (WireID.getWireID().contains("sit")) { y = 700; }
-		        else if (WireID.getWireID().contains("km")) { y = 690; }
+		        else if (WireID.getWireID().equals("km1") || WireID.getWireID().equals("km4")) {
+		        	y = 695;
+		        	x[0] = 755; x[1] = 700; x[2] = 655; x[3] = 610;
+		        } else if (WireID.getWireID().contains("km")) { y = 695; }
 		        
 		        Color[] color = new Color[4];
 		        
-		        for (int i = 0; i < color.length; i++) {
+		        for (int i = 0; i < 4; i++) {
 		        	color[i] = new Color(image.getRGB(x[i], y));
 		        	if (color[i].getRed() != 0 || color[i].getBlue() != 0 || color[i].getGreen() != 255) {
-		        		
 		        		return false;
 		        	}
 		        }
+		        
 	        } catch (AWTException e) { e.printStackTrace(); }
-	        catch (IOException e) { e.printStackTrace(); }
-	        catch (Exception e) { e.printStackTrace(); }
+	        catch (IOException e) { 
+	        	e.printStackTrace();
+	        	System.out.println("뭘까?");
+	        } catch (Exception e) { e.printStackTrace(); }
 	        
 	        return true;
 	    }

@@ -1,0 +1,117 @@
+package test;
+
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Duration;
+import java.time.LocalDate;
+
+public class CalculateTime {
+	
+	private static String currentDate = "";
+	private static String currentYear = "";
+	private static String currentMonth = "";
+	private static String currentDay = "";
+	
+	private static String currentTime = "";
+	private static String currentHour = "";
+	private static String currentMin = "";
+	private static String currentSec = "";
+	
+	private static String currentDateForFile = "";
+	private static String currentTimeForFile = "";
+
+	public static void main(String[] args) {
+//		String line = "[I](2023-04-24  06:28:27 pm)작업중 정지 [02:18:09]";
+//		
+//		String ampm = line.substring(25, 27);
+//		
+//		// 날짜
+//		currentDate = line.substring(4, 14);
+//		currentYear = line.substring(4, 8);
+//		currentMonth = line.substring(9, 11);
+//		currentDay = line.substring(12, 14);
+//		
+//		// 시간
+//		currentTime = line.substring(16, 24);
+//		currentHour = line.substring(16, 18);
+//		currentMin = line.substring(19, 21);
+//		currentSec = line.substring(22, 24);
+//		
+//		if (ampm.equals("pm")) {
+//			int hour = Integer.valueOf(currentHour);
+//			hour += 12;
+//			currentHour = String.valueOf(hour);
+//			currentTime = currentHour + line.substring(18, 24);
+//		}
+//		
+//		currentDateForFile = currentYear + currentMonth + currentDay;
+//		currentTimeForFile = currentHour + currentMin + currentSec;
+		
+		
+		// 현재 날짜
+		currentDate = LocalDate.now().toString();
+		
+		// 현재 날짜 (이미지 파일용)
+		String[] dateForFile = currentDate.split("-");
+		currentYear = dateForFile[0];
+		currentMonth = dateForFile[1];
+		currentDay = dateForFile[2];
+		
+		dateForFile[0] = dateForFile[0].substring(2, 4);
+		currentDateForFile = String.join("", dateForFile);
+		
+		LocalTime time = LocalTime.now();
+		
+		currentHour = String.valueOf(time.getHour());
+		currentMin = String.valueOf(time.getMinute());
+		currentSec = String.valueOf(time.getSecond());
+		
+		if (Integer.valueOf(currentHour) < 10) { currentHour = "0" + currentHour; }
+		if (Integer.valueOf(currentMin) < 10) { currentMin = "0" + currentMin; }
+		if (Integer.valueOf(currentSec) < 10) { currentSec = "0" + currentSec; }
+		
+		// 현재 시간
+		currentTime = currentHour + ":" + currentMin + ":" + currentSec;
+		
+		
+		// 현재 시간 (이미지 파일용)
+		currentTimeForFile = currentHour + currentMin + currentSec;
+		
+		
+		
+		
+		System.out.println("currentDate: "+currentDate);
+		System.out.println("currentTime: "+currentTime);
+		System.out.println("currentHour: "+currentHour);
+		System.out.println("currentMin: "+currentMin);
+		System.out.println("currentDateForFile: "+currentDateForFile);
+		System.out.println("currentTimeForFile: "+currentTimeForFile);
+//		System.out.println("ampm: "+ampm);
+		
+		
+		
+		
+        LocalDateTime startDate = 
+        		LocalDateTime.of(Integer.valueOf(currentYear), Integer.valueOf(currentMonth), Integer.valueOf(currentDay), 
+        				Integer.valueOf(currentHour), Integer.valueOf(currentMin), Integer.valueOf(currentSec));
+        
+        LocalDateTime endDate = 
+        		LocalDateTime.of(2023, 05, 04, 14, 30, 41);
+
+        
+        Duration duration = Duration.between(startDate, endDate);
+
+        long seconds = duration.getSeconds();
+        long hours = seconds / 3600;
+        long minutes = (seconds % 3600) / 60;
+        long remainingSeconds = seconds % 60;
+
+        System.out.println("시작 날짜: " + startDate);
+        System.out.println("종료 날짜: " + endDate);
+        System.out.println("시간 간격: " + hours + "시간 " + minutes + "분 " + remainingSeconds + "초");
+        System.out.println("초: "+ seconds);
+    }
+        
+        
+	
+}

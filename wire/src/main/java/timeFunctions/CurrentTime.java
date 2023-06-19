@@ -2,6 +2,8 @@ package timeFunctions;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.LocalDateTime;
+import java.time.Duration;
 
 
 // Operations 기능
@@ -32,45 +34,52 @@ import java.time.LocalTime;
 public class CurrentTime {
 	
 	private static String currentDate = "";
+	private static int currentYear = 0;
+	private static int currentMonth = 0;
+	private static int currentDay = 0;
+	
 	private static String currentTime = "";
-	private static String currentHour;
-	private static String currentMin;
+	private static int currentHour = 0;
+	private static int currentMin = 0;
+	private static int currentSec = 0;
+	
 	private static String currentDateForFile = "";
 	private static String currentTimeForFile = "";
 	
-
-	
-	// 이 메서드를 호출하면 현재 시간을 맴버 변수에 저장
+	// 메서드로 시간 추출
 	public static void setTime() {
-		LocalDate date = LocalDate.now();
 		
 		// 현재 날짜
-		CurrentTime.currentDate = date.toString();
+		LocalDate date = LocalDate.now();
+		currentDate = date.toString();
 		
 		// 현재 날짜 (이미지 파일용)
-		String[] dateForFile = CurrentTime.currentDate.split("-");
-		dateForFile[0] = dateForFile[0].substring(2, 4);
-		CurrentTime.currentDateForFile = String.join("", dateForFile);
+		currentYear = date.getYear();
+		currentMonth = date.getMonthValue();
+		currentDay = date.getDayOfMonth();
+		
+		currentDateForFile = String.join("", currentDate.split("-"));
 		
 		LocalTime time = LocalTime.now();
 		
-		String hour = String.valueOf(time.getHour());
-		String min = String.valueOf(time.getMinute());
-		String sec = String.valueOf(time.getSecond());
+		currentHour = time.getHour();
+		currentMin = time.getMinute();
+		currentSec = time.getSecond();
 		
-		if (Integer.valueOf(hour) < 10) { hour = "0" + hour; }
-		if (Integer.valueOf(min) < 10) { min = "0" + min; }
-		if (Integer.valueOf(sec) < 10) { sec = "0" + sec; }
+		String hour = String.valueOf(currentHour);
+		String min = String.valueOf(currentMin);
+		String sec = String.valueOf(currentSec);
+		
+		if (currentHour < 10) { hour = "0" + currentHour; }
+		if (currentMin < 10) { min = "0" + currentMin; }
+		if (currentSec < 10) { sec = "0" + currentSec; }
 		
 		// 현재 시간
-		CurrentTime.currentTime = hour + ":" + min + ":" + sec;
+		currentTime = hour + ":" + min + ":" + sec;
 		
-		// 현재 시, 분
-		CurrentTime.currentHour = hour;
-		CurrentTime.currentMin = min;
 		
 		// 현재 시간 (이미지 파일용)
-		CurrentTime.currentTimeForFile = hour + min + sec;
+		currentTimeForFile = hour + min + sec;
 	}
 	
 	
@@ -85,12 +94,32 @@ public class CurrentTime {
 				return CurrentTime.currentDateForFile;
 			case "timeFF":
 				return CurrentTime.currentTimeForFile;
+//			case "hour":
+//				return CurrentTime.currentHour;
+//			case "min":
+//				return CurrentTime.currentMin;
+			default:
+				return "";  // 여기에 에러를 만들어서 넘길까? 230316
+		}
+	}
+	
+	
+	public static int getTimeInt(String type) {
+		switch(type) {
 			case "hour":
 				return CurrentTime.currentHour;
 			case "min":
 				return CurrentTime.currentMin;
+			case "sec":
+				return CurrentTime.currentSec;
+			case "year":
+				return CurrentTime.currentYear;
+			case "month":
+				return CurrentTime.currentMonth;
+			case "day":
+				return CurrentTime.currentDay;
 			default:
-				return "";  // 여기에 에러를 만들어서 넘길까? 230316
+				return -1;  // 여기에 에러를 만들어서 넘길까? 230316
 		}
 	}
 }

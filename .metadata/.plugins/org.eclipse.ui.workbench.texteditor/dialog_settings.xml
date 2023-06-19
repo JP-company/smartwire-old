@@ -8,14 +8,14 @@
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="search"/>
+			<item value="break"/>
+			<item value="가공감지"/>
+			<item value="setStatus"/>
 			<item value="pushAlarmUpload"/>
 			<item value="println"/>
 			<item value="stop_auto_cut_failure"/>
 			<item value="system"/>
-			<item value="al"/>
-			<item value="firestore"/>
-			<item value="initializeApp"/>
-			<item value="Defaulting to no-operation (NOP) logger implementation"/>
 		</list>
 		<list key="replacehistory">
 		</list>

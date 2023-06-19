@@ -1,0 +1,34 @@
+package timeFunctions;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+
+public class ActualProcessingTime {
+	
+	private static boolean timeChecked = false;
+	private static LocalDateTime startDateTime = null;
+	private static int actualProcessingTime = 0;
+
+	
+	public static void calculateTime(String logKey) {
+		if (logKey == "Nc File:" || logKey == "작업 재시작" || logKey == "가공감지") {
+			startDateTime = getTime();
+			
+		} else if (startDateTime != null) {
+			
+			LocalDateTime stopDateTime = getTime();
+			
+			startDateTime = null;
+			timeChecked = true;
+		}
+	}
+	
+	private static LocalDateTime getTime() {
+		return LocalDateTime.of(CurrentTime.getTimeInt("year"), CurrentTime.getTimeInt("month"), CurrentTime.getTimeInt("day"), CurrentTime.getTimeInt("hour"), CurrentTime.getTimeInt("min"), CurrentTime.getTimeInt("sec"));
+	}
+
+	
+	public static int getActualProcessingTime() {
+		return actualProcessingTime;
+	}
+}
