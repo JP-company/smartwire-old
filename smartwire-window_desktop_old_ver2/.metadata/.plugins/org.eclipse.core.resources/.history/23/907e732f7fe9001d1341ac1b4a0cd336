@@ -1,0 +1,65 @@
+package test;
+
+import java.time.LocalDateTime;
+import java.time.Duration;
+
+public class CalculateTime {
+	
+	private static String currentDate = "";
+	private static String currentTime = "";
+	private static String currentHour;
+	private static String currentMin;
+	private static String currentDateForFile = "";
+	private static String currentTimeForFile = "";
+
+	public static void main(String[] args) {
+		String line = "[I](2023-04-24  06:28:27 pm)작업중 정지 [02:18:09]";
+		
+		
+		String ampm = line.substring(25, 27);
+		
+		currentDate = line.substring(4, 14);
+		currentTime = line.substring(16, 24);
+		currentHour = line.substring(16, 18);
+		currentMin = line.substring(19, 21);
+		
+		if (ampm.equals("pm")) {
+			int hour = Integer.parseInt(currentHour);
+			hour += 12;
+			currentHour = String.valueOf(hour);
+			currentTime = currentHour + line.substring(18, 24);
+		}
+		
+		currentDateForFile = line.substring(4, 8) + line.substring(9, 11) + line.substring(12, 14);
+		currentTimeForFile = currentHour + currentMin + line.substring(22, 24);
+		
+		System.out.println("currentDate: "+currentDate);
+		System.out.println("currentTime: "+currentTime);
+		System.out.println("currentHour: "+currentHour);
+		System.out.println("currentMin: "+currentMin);
+		System.out.println("currentDateForFile: "+currentDateForFile);
+		System.out.println("currentTimeForFile: "+currentTimeForFile);
+		System.out.println("ampm: "+ampm);
+		
+		
+		
+		
+        LocalDateTime startDate = LocalDateTime.of(2023, 01, 01, 18, 00, 00);
+        LocalDateTime endDate = LocalDateTime.of(2023, 01, 02, 17, 30, 30);
+
+        Duration duration = Duration.between(startDate, endDate);
+
+        long seconds = duration.getSeconds();
+        long hours = seconds / 3600;
+        long minutes = (seconds % 3600) / 60;
+        long remainingSeconds = seconds % 60;
+
+        System.out.println("시작 날짜: " + startDate);
+        System.out.println("종료 날짜: " + endDate);
+        System.out.println("시간 간격: " + hours + "시간 " + minutes + "분 " + remainingSeconds + "초");
+        System.out.println("초: "+ seconds);
+    }
+        
+        
+	
+}

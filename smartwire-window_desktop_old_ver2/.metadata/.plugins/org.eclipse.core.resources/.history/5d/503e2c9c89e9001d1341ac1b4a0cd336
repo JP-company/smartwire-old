@@ -1,0 +1,53 @@
+package timeFunctions;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+
+public class ActualProcessingTime {
+	
+	private static LocalDateTime firstStartDateTime = null;
+	private static LocalDateTime startDateTime = null;
+	
+	private static long actualProcessingTime = 0;
+	private static long wholeProcessingTime = 0;
+	
+	public static void calculateTime(String logKey) {
+		if (logKey == "Nc File:" || logKey == "작업 재시작" || logKey == "가공감지") {
+			startDateTime = getTime();
+			
+			// 처음 시작
+			if (logKey == "NcFile:") {
+				firstStartDateTime = startDateTime;
+			}
+			
+		} else if (startDateTime != null) {
+			Duration duration = Duration.between(startDateTime, getTime());
+			actualProcessingTime = duration.getSeconds();
+			
+			startDateTime = null;
+			
+			// 작업 끝
+			if (logKey == "Reset" || logKey == "작업 끝") {
+				duration = Duration.between(firstStartDateTime, getTime());
+				wholeProcessingTime = duration.getSeconds();
+			}
+			
+		}
+	}
+	
+
+	
+	public static long getWholeProcessingTime() { // 전체 걸린 시간
+		return wholeProcessingTime;
+	}
+	
+	public static long getActualProcessingTime() { // 각 가공 시간
+		return actualProcessingTime;
+	}
+	
+	
+	
+	private static LocalDateTime getTime() {
+		return LocalDateTime.of(CurrentTime.getTimeInt("year"), CurrentTime.getTimeInt("month"), CurrentTime.getTimeInt("day"), CurrentTime.getTimeInt("hour"), CurrentTime.getTimeInt("min"), CurrentTime.getTimeInt("sec"));
+	}
+}

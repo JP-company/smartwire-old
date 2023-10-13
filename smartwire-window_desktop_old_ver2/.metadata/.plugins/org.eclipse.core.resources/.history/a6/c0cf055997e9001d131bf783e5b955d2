@@ -1,0 +1,132 @@
+package firebase;
+
+import java.net.ConnectException;
+import java.net.UnknownHostException;
+
+import data.DateQueue;
+import data.LogData;
+import data.ManagingStatus;
+import file.NcFile;
+import file.WireID;
+import screenshots.Screenshots;
+import timeFunctions.CurrentTime;
+import timeFunctions.ProcessingTime;
+import timeFunctions.TimeZone;
+
+
+public class FirebaseUpload {
+	
+	private static String path = "";
+	private static String pathLog = "";
+	private static String pathPush = "push_server/" + WireID.getWireID();
+	private static String pathInfo = "";
+	
+	static {
+		if (WireID.getWireID().contains("km")) { path = "company/km/"; } 
+		else if (WireID.getWireID().contains("sit")) { path = "company/sit/"; }
+		FirebaseUpload.fileInfoUpload();
+	}
+	
+	
+	// 파일 이름 서버 업로드(재업로드)
+	public static void fileInfoUpload() {
+		try {
+			// 가공파일 이름 경로 설정
+			pathInfo = path + WireID.getWireID() + "/FileInfo/" + CurrentTime.getTime("date") + "/" + CurrentTime.getTime("time");
+			
+			// 가공파일 이름 업로드 (재업로드)
+			FirebaseUploadForm.uploadForm(pathInfo, "file", NcFile.getNcFile());
+		} catch (UnknownHostException uke) {
+			System.out.println(CurrentTime.getTime("date") + " " + CurrentTime.getTime("time") + " " + "[파일명 업로드] 인터넷 연결이 불안정합니다.");
+		} catch (ConnectException ce) {
+			System.out.println(CurrentTime.getTime("date") + " " + CurrentTime.getTime("time") + " " + ce.getMessage());
+		} catch (Exception e) { e.printStackTrace(); }
+	}
+	
+	// 파일 이름 서버 업로드
+	public static void fileInfoUpload(String line, String status) {
+		try {
+			// 가공파일 이름 경로 설정
+			pathInfo = path + WireID.getWireID() + "/FileInfo/" + CurrentTime.getTime("date") + "/" + CurrentTime.getTime("time");
+			
+			// 가공파일 이름 업로드
+			if (status == "finished") {
+				FirebaseUploadForm.uploadForm(pathInfo, "file", NcFile.getNcFile(), "status", status, "wholeProcessingTime", ProcessingTime.getWholeProcessingTime(), "actualProcessingTime", ProcessingTime.getActualProcessingTime());
+			} else {
+				FirebaseUploadForm.uploadForm(pathInfo, "file", NcFile.getNcFile(line), "status", status);
+			}
+			
+		} catch (UnknownHostException uke) {
+			System.out.println(CurrentTime.getTime("date") + " " + CurrentTime.getTime("time") + " " + "[파일명 업로드] 인터넷 연결이 불안정합니다.");
+		} catch (ConnectException ce) {
+			System.out.println(CurrentTime.getTime("date") + " " + CurrentTime.getTime("time") + " " + ce.getMessage());
+		} catch (Exception e) { e.printStackTrace(); }
+	}
+	
+	
+	
+	
+	// 푸시알림 서버 업로드
+	public static void pushAlarmUpload(String logKey) {
+		try {
+			FirebaseUploadForm.uploadForm(pathPush, "push", LogData.getLogMap().get(logKey)[0], "time", CurrentTime.getTime("date") + " " + CurrentTime.getTime("time"), "wireID", WireID.getWireID());
+			
+		} catch (UnknownHostException uke) {
+			System.out.println(CurrentTime.getTime("date") + " " + CurrentTime.getTime("time") + " " + "[푸시알림] 인터넷 연결이 불안정합니다.");
+		} catch (ConnectException ce) {
+			System.out.println(CurrentTime.getTime("date") + " " + CurrentTime.getTime("time") + " " + ce.getMessage());
+		} catch (Exception e) { e.printStackTrace(); }
+	}
+	
+	
+	
+	public static void autoStartDataUpload(String logKey) {
+		try {
+			String pathAuto = "remote_data/" + WireID.getWireID() + "/" + CurrentTime.getTime("date") + "/" + CurrentTime.getTime("time");
+			
+			FirebaseUploadForm.uploadForm(pathAuto, "log", LogData.getLogMap().get(logKey)[0], "time", CurrentTime.getTime("time"));
+			
+		} catch (UnknownHostException uke) {
+			System.out.println(CurrentTime.getTime("date") + " " + CurrentTime.getTime("time") + " " + "[자동실행 프로그램] 인터넷 연결이 불안정합니다.");
+		} catch (ConnectException ce) {
+			System.out.println(CurrentTime.getTime("date") + " " + CurrentTime.getTime("time") + " " + ce.getMessage());
+		} catch (Exception e) { e.printStackTrace(); }
+	}
+	
+	
+	// 로그 서버 업로드
+	public static void logUpload(String logKey) {
+			
+			try {
+				// 로그정보 업로드 경로 설정
+				pathLog = path + WireID.getWireID() + "/Logs/" + CurrentTime.getTime("date") + "/" + CurrentTime.getTime("time");
+				
+				// 로그정보 업로드
+				FirebaseUploadForm.uploadForm(pathLog, "log", LogData.getLogMap().get(logKey)[0], "time", CurrentTime.getTime("time"));
+				
+				// 날짜 업로드
+				DateQueue.saveDate(CurrentTime.getTime("date"));
+				FirebaseUploadForm.uploadForm(path + WireID.getWireID() + "/Logs", "date", DateQueue.getDateData());
+				// 날짜 로컬 파일로 저장
+				DateQueue.SaveDateData();
+				
+				// 푸시알림 서버 업로드
+				if(TimeZone.getAlarmTime()) { FirebaseUpload.pushAlarmUpload(logKey); }
+				
+				// 스크린샷 로컬 폴더에 저장
+				Screenshots.saveScreenshot(logKey);
+				
+				// 콘솔창 print
+				System.out.println(CurrentTime.getTime("date") + " " + CurrentTime.getTime("time") + " " + LogData.getLogMap().get(logKey)[1]);
+				
+				// 시작여부 업데이트
+				ManagingStatus.setStatus(logKey);
+				
+			} catch (UnknownHostException uke) {
+				System.out.println(CurrentTime.getTime("date") + " " + CurrentTime.getTime("time") + " " + "[로그 업로드] 인터넷 연결이 불안정합니다.");
+			} catch (ConnectException ce) {
+				System.out.println(CurrentTime.getTime("date") + " " + CurrentTime.getTime("time") + " " + ce.getMessage());
+			} catch (Exception e) { e.printStackTrace(); }
+			
+		}
+}

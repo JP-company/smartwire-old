@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="org.omg.CORBA.portable.InputStream"/>
+<fullyQualifiedTypeName name="java.io.InputStream"/>
+<fullyQualifiedTypeName name="com.google.cloud.firestore.v1.FirestoreClient"/>
+<fullyQualifiedTypeName name="org.omg.CORBA_2_3.portable.InputStream"/>
+<fullyQualifiedTypeName name="com.google.firebase.cloud.FirestoreClient"/>
+<fullyQualifiedTypeName name="com.google.cloud.firestore.WriteResult"/>
+<fullyQualifiedTypeName name="com.google.api.services.storage.Storage.BucketAccessControls.List"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="com.google.cloud.firestore.FirestoreOptions"/>
+<fullyQualifiedTypeName name="io.grpc.binarylog.v1.GrpcLogEntry.Logger"/>
+<fullyQualifiedTypeName name="org.slf4j.Logger"/>
+<fullyQualifiedTypeName name="java.util.logging.Logger"/>
+<fullyQualifiedTypeName name="java.awt.event.InputEvent"/>
+<fullyQualifiedTypeName name="java.awt.AWTException"/>
+<fullyQualifiedTypeName name="firebase.FirebaseUploadForm"/>
+<fullyQualifiedTypeName name="java.time.LocalDate"/>
+<fullyQualifiedTypeName name="java.time.LocalTime"/>
+<fullyQualifiedTypeName name="java.sql.Time"/>
+<fullyQualifiedTypeName name="functions.TimeFunc"/>
+<fullyQualifiedTypeName name="java.io.FileNotFoundException"/>
+<fullyQualifiedTypeName name="file.LogFileReader"/>
+<fullyQualifiedTypeName name="functions.TimeSleep"/>
+<fullyQualifiedTypeName name="java.lang.ArrayIndexOutOfBoundsException"/>
+<fullyQualifiedTypeName name="javax.swing.text.html.HTMLDocument.Iterator"/>
+<fullyQualifiedTypeName name="java.util.Iterator"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="data.LogData"/>
+<fullyQualifiedTypeName name="java.net.UnknownHostException"/>
+<fullyQualifiedTypeName name="java.net.ConnectException"/>
+<fullyQualifiedTypeName name="file.WireID"/>
+<fullyQualifiedTypeName name="screenShots.ScreenDetection"/>
+<fullyQualifiedTypeName name="java.util.ListIterator"/>
+<fullyQualifiedTypeName name="data.DateQueue"/>
+<fullyQualifiedTypeName name="screenShots.Screenshots"/>
+<fullyQualifiedTypeName name="file.FileCreater"/>
+<fullyQualifiedTypeName name="timeFunctions.TimeSleep"/>
+<fullyQualifiedTypeName name="firebase.FirebaseUpload"/>
+<fullyQualifiedTypeName name="autoStart.AutoStart"/>
+<fullyQualifiedTypeName name="timeFunctions.TimeZone"/>
+<fullyQualifiedTypeName name="timeFunctions.ProcessingTime"/>
+<fullyQualifiedTypeName name="timeFunctions.CurrentTime"/>
+</qualifiedTypeNameHistroy>
